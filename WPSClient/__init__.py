@@ -65,6 +65,7 @@ class WPSClient:
     """ """
     
     UUID = None
+    epsg = None
     request = None
     resultsComplex = []
     resultsLiteral = []
@@ -83,14 +84,6 @@ class WPSClient:
         self.UUID = uuid.uuid1().__str__()
         
         self.loadConfigs()
-        
-        self.buildRequest(serverAddress, processId, inputNames, inputValues)
-        
-        if(self.request == None):
-            print "It wasn't possible to build a request with the given arguments"
-            return
-        
-        self.sendRequest()
         
     def loadConfigs(self):
         """ Loads default values from the configuration file. """
@@ -129,6 +122,12 @@ class WPSClient:
         It is inspired on this page:
         http://stackoverflow.com/questions/862173/how-to-download-a-file-using-python-in-a-smarter-way/863017#863017
         """       
+        
+        self.buildRequest(serverAddress, processId, inputNames, inputValues)
+        
+        if(self.request == None):
+            print "It wasn't possible to build a request with the given arguments"
+            return
 
         print "Starting download of %s" %self.request
     
@@ -159,7 +158,7 @@ class WPSClient:
         map = UMN.MapFile(self.UUID)
         
         map.shapePath    = self.pathFilesGML
-        map.epsgCode     = "28992"
+        map.epsgCode     = self.epsg
         map.mapTemplate  = self.mapTemplate
         map.imagePath    = self.imagePath
         map.imageURL     = self.imageURL
