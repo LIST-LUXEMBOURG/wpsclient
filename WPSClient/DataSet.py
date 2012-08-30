@@ -4,7 +4,7 @@ Created on Aug 21, 2012
 @author: Luís de Sousa [luis.desousa@tudor.lu]
 
 Contains a class that wraps spatial data sets stored in the disk.
-PRovides method to retrieve useful information on the data set.
+Provides methods to retrieve useful information on the data set.
 
 Issues:
 . Only tested with vector GML files

@@ -32,7 +32,7 @@ class ComplexOutput:
 		self.value = rawString.split("<wps:ComplexData")[1].split(">")[1].split("</wps:ComplexData>")[0].split("</wps:ComplexData")[0]
 		self.uniqueID = unique
 
-	def saveToDisk():
+	def saveToDisk(self):
 		print "Not ready yet"
 
 ###########################################################

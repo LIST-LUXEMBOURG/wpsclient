@@ -1,7 +1,7 @@
 '''
 Created on Aug 9, 2012
 
-@author: Luís de Sousa [luis.desousa@tudor.lu]
+@author: Luis de Sousa [luis.desousa@tudor.lu]
 
 This file contains classes that serve as wrappers for the several components of
 a MapServer mapfile. It can produce a sample mafile with a single layer if no 
@@ -37,10 +37,10 @@ class MapFile:
     serviceTitle    = " A test service for the city of Rotterdam"
     mapTemplate     = "/var/www/MapServ/map.html"
     imagePath       = "/var/www/MapServ/map_images/"
-    imgeURL         = "/MapServ/map_images/"
-    MapServerURL    = "http://localhost/cgi-bin/mapserv?map="
+    imageURL        = "/MapServ/map_images/"
+    mapServerURL    = "http://localhost/cgi-bin/mapserv?map="
     mapFilesPath    = "/var/www/MapServ/"
-    additionalProjs = "EPSG:3035 EPSG:4326 EPSG:3785 EPSG:900913"
+    otherProjs      = "EPSG:3035 EPSG:4326 EPSG:3785 EPSG:900913"
     layers              = []
 
     def __init__(self, nameInit = "TestMapFile"):
@@ -64,11 +64,11 @@ class MapFile:
         text += "WEB \n"
         text += "  TEMPLATE  \"" + self.mapTemplate + "\"\n"
         text += "  IMAGEPATH \"" + self.imagePath + "\"\n"
-        text += "  IMAGEURL  \"" + self.imgeURL + "\"\n"
+        text += "  IMAGEURL  \"" + self.imageURL + "\"\n"
         text += "  METADATA \n"
         text += "    \"ows_title\"           \"" + self.serviceTitle + "\"\n"
-        text += "    \"ows_onlineresource\" \"" + self.MapServerURL + self.filePath() + "&\"\n"
-        text += "    \"ows_srs\"             \"EPSG:" + self.epsgCode + " " + self.additionalProjs + "\"\n"
+        text += "    \"ows_onlineresource\" \"" + self.mapServerURL + self.filePath() + "&\"\n"
+        text += "    \"ows_srs\"             \"EPSG:" + self.epsgCode + " " + self.otherProjs + "\"\n"
         text += "    \"ows_bbox_extended\" \"true\"\n"
         text += "    \"ows_enable_request\" \"*\"\n\n" 
 
@@ -101,7 +101,7 @@ class MapFile:
         result = self.mapHeader()
         # If no layer has been declared add default layer
         if len(self.layers) <= 0:
-            result += MapLayer().getString()
+            result += VectorLayer().getString()
         else:
             for layer in self.layers:
                 result += layer.getString()
@@ -117,27 +117,31 @@ class MapFile:
 
 ###########################################################################3
 
-class MapLayer:
+class VectorLayer:
     """ Wrapper for the layer component of a MapServer mapfile.
         At this stage it supports vector layers."""
 
     name         = None
-    layerType      = "POLYGON"
+    layerType    = "POLYGON"
     title        = "A test layer"
-    styles        = []
+    path         = None
+    styles       = []
 
-    def __init__(self, nameInit = "TestLayer"):
+    def __init__(self, path, nameInit = "TestLayer"):
         
+        self.path = path
         self.name = nameInit
         # self.LayerHeader()
 
     def layerHeader(self):
 
         text  = "  LAYER # " + self.name + " " + self.layerType + " ------------------------\n\n"
-        text += "    NAME         " + self.name + "\n"
-        text += "    DATA         " + self.name + "\n"
-        text += "    STATUS       OFF \n"
-        text += "    TYPE         " + self.layerType + "\n"
+        text += "    NAME           " + self.name + "\n"
+        text += "    CONNECTIONTYPE OGR\n"
+        text += "    CONNECTION     \"" + self.path + "\"\n"
+        #text += "    DATA         " + self.name + "\n"
+        text += "    STATUS         OFF \n"
+        text += "    TYPE           " + self.layerType + "\n"
 
         text += "  METADATA \n"
         text += "    \"DESCRIPTION\" \"" + self.name + "\"\n"
@@ -182,7 +186,7 @@ class MapStyle:
     """ Wrapper for the MapServer style component of a vector layer. """
 
     penWidth = "2"
-    colour = "160 0 0"
+    colour = "220 100 100"
 
     def __init__(self, pen = "2", col = "160 0 0"):
 
