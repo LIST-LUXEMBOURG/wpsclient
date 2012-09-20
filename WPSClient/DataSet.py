@@ -12,12 +12,12 @@ Issues:
 '''
 
 gdal=False
-try:
-    from osgeo import gdal
-    from osgeo import ogr
-    from osgeo import osr
-except Exception,e:
-    gdal=False
+#try:
+from osgeo import gdal
+from osgeo import ogr
+from osgeo import osr
+#except Exception,e:
+#    gdal=False
 
 class DataSet:
 	""" """
@@ -85,7 +85,7 @@ class DataSet:
 		if self.spatialReference.IsProjected():
 			code = self.spatialReference.GetAuthorityCode("PROJCS")
 		else:
-			code = spatialReference.GetAuthorityCode("GEOGCS")
+			code = self.spatialReference.GetAuthorityCode("GEOGCS")
 		return code
 
 	def getBBox(self):
@@ -95,8 +95,8 @@ class DataSet:
 
 		if self.dataType == "raster":
 			geotransform = self.dataSet.GetGeoTransform()
-			height = self.dataSet.RasterYSize
-			width = self.dataSet.RasterXSize
+			#height = self.dataSet.RasterYSize
+			#width = self.dataSet.RasterXSize
 			return (geotransform[0],
 				    geotransform[3]+geotransform[5]*self.dataSet.RasterYSize,
 				    geotransform[0]+geotransform[1]*self.dataSet.RasterXSize,

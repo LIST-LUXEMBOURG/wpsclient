@@ -115,6 +115,42 @@ class MapFile:
         FILE.close()
 
 
+class RasterLayer:
+    """
+    Check this example:
+    RO_localOWS_test.amp
+    """
+    
+    name         = None
+    title        = "A test layer"
+    path         = None
+    styles       = []
+    
+    def __init__(self, path, nameInit = "TestLayer"):
+        
+        self.path = path
+        self.name = nameInit
+        
+    def getString(self):
+        
+        text =  "  LAYER \n"
+        text += "    NAME \"" + self.name + "\"\n"
+        text += "    TYPE RASTER  \n"
+        text += "    STATUS OFF \n"
+        text += "    DATA " + self.path + "\n"
+        text += "    PROCESSING \"SCALE=AUTO\" \n\n"
+        
+        text += "    METADATA \n"
+        text += "      \"wms_title\" \"" + self.name + "\" \n"
+        text += "      \"ows_abstract\" \"" + self.title + "\"\n\n"
+        text += "      \"wcs_label\"           \"" + self.name + "\"   ### required \n"
+        text += "      \"wcs_rangeset_name\"   \"Range 1\"  ### required to support DescribeCoverage request \n"
+        text += "      \"wcs_rangeset_label\"  \"My Label\" ### required to support DescribeCoverage request \n"
+        text += "    END \n"
+        text += "  END \n"
+        
+        return text
+
 ###########################################################################3
 
 class VectorLayer:

@@ -13,6 +13,7 @@ cli = WPSClient.WPSClient(
     ("1", "http%3A%2F%2Fservices.iguess.tudor.lu%2Fpywps%2FsampleData%2FsampleLineRotterdam.xml"))
 
 # Needed because PyWPS deletes CRS information from the outputs
+# Maybe it should be a parameter to the constructor?
 cli.epsg = "28992"
 
 cli.sendRequest()
