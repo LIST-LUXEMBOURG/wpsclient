@@ -1,7 +1,7 @@
 '''
 Created on Aug 21, 2012
 
-@author: Luís de Sousa [luis.desousa@tudor.lu]
+@author: Luis de Sousa [luis.desousa@tudor.lu]
 
 Contains a class that wraps spatial data sets stored in the disk.
 Provides methods to retrieve useful information on the data set.
@@ -19,6 +19,8 @@ from osgeo import osr
 #except Exception,e:
 #    gdal=False
 
+DEBUG = True
+
 class DataSet:
 	""" """
 
@@ -29,11 +31,13 @@ class DataSet:
 	def __init__(self, path):
 
 		self.dataType = self.getDataSet(path)
-		print self.dataType
 		self.getSpatialReference()
-		print self.getEPSG() 
-		print self.getBBox()
-		print self.getBBox()[0]
+		
+		if (DEBUG):
+			print "Read a data set of type " + str(self.dataType)
+			print "It has the following SRS: " + str(self.getEPSG())
+			print "And the following bounds: " + str(self.getBBox())
+			print "First bound: " + str(self.getBBox()[0])
 
 	def getDataSet(self, path):
 		"""
@@ -82,6 +86,9 @@ class DataSet:
 		"""
 
 		code=None
+		if self.spatialReference == None:
+			return None
+		
 		if self.spatialReference.IsProjected():
 			code = self.spatialReference.GetAuthorityCode("PROJCS")
 		else:
@@ -104,11 +111,24 @@ class DataSet:
 		else:
 			layer = self.dataSet.GetLayer()
 			return layer.GetExtent()
+		
+	def getGeometryType(self):
+		
+		layer = self.dataSet.GetLayer()
+		if layer <> None:
+			type = ogr.GeometryTypeToName(layer.GetGeomType())
+			if "Point" in type:
+				return "Point"
+			if "Line" in type:
+				return "Line"
+			if "Polygon" in type:
+				return "Polygon"
+		return None
 
 
 # Testing
 
-x = DataSet("/home/desousa/Tudor/MUSIC/Ludwigsburg/simpleLineLudwigsburgWithCRS.gml")
+# x = DataSet("/home/desousa/Tudor/MUSIC/Ludwigsburg/simpleLineLudwigsburgWithCRS.gml")
 
 
 

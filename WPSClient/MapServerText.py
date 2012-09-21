@@ -8,9 +8,7 @@ a MapServer mapfile. It can produce a sample mafile with a single layer if no
 arguments are passed to the constructors. 
 
 Issues:
-. Replace SHAPEPATH for direct links in the Layer class
-. Makes sense to have initialisers in constructors?
-. No support for raster layers.
+. Not yet taking into account layer EPSG
 . No support for PostGis layers. 
 
 '''
@@ -41,14 +39,35 @@ class MapFile:
     mapServerURL    = "http://localhost/cgi-bin/mapserv?map="
     mapFilesPath    = "/var/www/MapServ/"
     otherProjs      = "EPSG:3035 EPSG:4326 EPSG:3785 EPSG:900913"
-    layers              = []
+    layers          = []
 
     def __init__(self, nameInit = "TestMapFile"):
         
         self.name = nameInit 
         # self.mapHeader()
+        
+    def calculateBBoxFromLayers(self):
+        
+        if len(self.layers) > 0:
+            self.bBox = self.layers[0].bBox
+        else:
+            return
+        
+        for i in range (1,len(self.layers)):
+            if self.layers[i].bBox[0] < self.bBox[0]:
+                self.bBox[0] = self.layers[i].bBox[0]
+            if self.layers[i].bBox[1] < self.bBox[1]:
+                self.bBox[1] = self.layers[i].bBox[1]
+            if self.layers[i].bBox[2] > self.bBox[2]:
+                self.bBox[2] = self.layers[i].bBox[2]
+            if self.layers[i].bBox[3] > self.bBox[3]:
+                self.bBox[3] = self.layers[i].bBox[3]
+                                    
+            
 
     def mapHeader(self):
+        
+        self.calculateBBoxFromLayers()
 
         text  = "MAP \n"
         text += "  NAME        \"" + self.name + "\"\n"
@@ -113,23 +132,35 @@ class MapFile:
         FILE = open(self.filePath(),"w")
         FILE.write(self.getString())
         FILE.close()
+        
+###########################################################################
 
+class Layer:
+    
+    name        = None
+    layerType   = None
+    title       = "A test layer"
+    bBox        = None
+    epsgCode    = None
+    
+    def __init__(self, path, bounds, epsg, nameInit = "TestLayer"):
+        
+        self.path = path
+        self.name = nameInit
+        self.bBox = bounds
+        self.epsgCode = epsg 
 
-class RasterLayer:
+###############################################################################
+
+class RasterLayer(Layer):
     """
     Check this example:
     RO_localOWS_test.amp
     """
     
-    name         = None
-    title        = "A test layer"
-    path         = None
-    styles       = []
-    
-    def __init__(self, path, nameInit = "TestLayer"):
+    def __init__(self, path, bounds, epsg, nameInit = "TestLayer"):
         
-        self.path = path
-        self.name = nameInit
+        Layer.__init__(self, path, bounds, epsg, nameInit) 
         
     def getString(self):
         
@@ -149,30 +180,26 @@ class RasterLayer:
         text += "    END \n"
         text += "  END \n"
         
-        return text
+        return text 
 
-###########################################################################3
+###########################################################################
 
-class VectorLayer:
+class VectorLayer(Layer):
     """ Wrapper for the layer component of a MapServer mapfile.
         At this stage it supports vector layers."""
 
-    name         = None
-    layerType    = "POLYGON"
-    title        = "A test layer"
     path         = None
     styles       = []
 
-    def __init__(self, path, nameInit = "TestLayer"):
+    def __init__(self, path, bounds, epsg, nameInit = "TestLayer"):
         
-        self.path = path
-        self.name = nameInit
+        Layer.__init__(self, path, bounds, epsg, nameInit) 
         # self.LayerHeader()
 
     def layerHeader(self):
 
         text  = "  LAYER # " + self.name + " " + self.layerType + " ------------------------\n\n"
-        text += "    NAME           " + self.name + "\n"
+        text += "    NAME           \"" + self.name + "\"\n"
         text += "    CONNECTIONTYPE OGR\n"
         text += "    CONNECTION     \"" + self.path + "\"\n"
         #text += "    DATA         " + self.name + "\n"

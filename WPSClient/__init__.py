@@ -268,6 +268,9 @@ class WPSClient:
             
         
     def generateMapFile(self):
+        """
+        :returns: The path to the map file generated.
+        """
         
         self.map = UMN.MapFile(self.UUID)
         
@@ -284,18 +287,32 @@ class WPSClient:
             
             ds = GDAL.DataSet(c.path)
             
-            if ds.type == "vector":
+            if ds.dataType == "vector":
                 style = UMN.MapStyle()
-                layer = UMN.VectorLayer(c.path)
-                layer.layerType = "Polygon"
+                layer = UMN.VectorLayer(c.path, ds.getBBox(), ds.getEPSG(), c.name)
+                type = str(ds.getGeometryType())
+                if type <> None:
+                    layer.layerType = type
+                else:
+                    layer.layerType = "Polygon"
+                print "The layer type: " + str(ds.getGeometryType())
                 layer.addStyle(style)
                 self.map.addLayer(layer)
               
-            elif ds.type == "raster":
-                layer = UMN.RasterLayer(c.path)
+            elif ds.dataType == "raster":
+                layer = UMN.RasterLayer(c.path, ds.getBBox(), ds.getEPSG(), c.name)
+                self.map.addLayer(layer)
+                
+            else:
+                print "Warning: couldn't determine the type of Complex output " + c.name
                   
         
         self.map.writeToDisk()
+        
+        if DEBUG:
+            print "Wrote map file to disk:\n" + self.map.filePath()
+            
+        return self.map.filePath()
         
     def getMapFilePath(self):
        

@@ -11,7 +11,7 @@ cli = WPSClient.WPSClient(
     "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
     "test_rand_map", 
     ["delay"], 
-    ["100"])
+    ["1"])
 
 cli.sendRequest()
 
@@ -29,5 +29,5 @@ cli.epsg = "28992"
 
 cli.generateMapFile()
 
-print "Successfully generated the map file:\n"
+print "Successfully generated the map file:"
 print cli.getMapFilePath()
