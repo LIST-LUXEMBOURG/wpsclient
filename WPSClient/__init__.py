@@ -159,7 +159,7 @@ class WPSClient:
         """ Loads default values from the configuration file. """
         
         parser = SafeConfigParser()
-        parser.read('default.cfg')
+        parser.read('WPSClient.cfg')
     
         self.pathFilesGML = parser.get('Data',      'GMLfilesPath')
         self.mapServerURL = parser.get('MapServer', 'MapServerURL')
