@@ -4,7 +4,7 @@ Created on Aug 9, 2012
 @author: Luis de Sousa [luis.desousa@tudor.lu]
 
 This file contains classes that serve as wrappers for the several components of
-a MapServer mapfile. It can produce a sample mafile with a single layer if no 
+a MapServer map file. It can produce a sample map file with a single layer if no 
 arguments are passed to the constructors. 
 
 Issues:
@@ -12,13 +12,6 @@ Issues:
 . No support for PostGis layers. 
 
 '''
-
-mapscript=False
-try:
-    from mapscript import *
-    mapscript=True
-except Exception,e:
-    print "MapScript could not be loaded, mapserver not supported: %s"
 
 class MapFile:
     """ This class wraps up a MapServer map file containing vector data.

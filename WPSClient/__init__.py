@@ -4,120 +4,21 @@ Created on Aug 28, 2012
 @author: Luis de Sousa [luis.desousa@tudor.lu]
 '''
 
-__all__ = ["DataSet","MapServerText"]
+__all__ = ["Output","DataSet","MapServerText"]
 
-from ConfigParser import SafeConfigParser
-import urllib2
-import uuid
 import os
+import urllib2
+import httplib
+from ConfigParser import SafeConfigParser
+import WPSTags.WPSTags as Tags
+import Output.ComplexOutput as ComplexOutput
+import Output.LiteralOutput as LiteralOutput
+import XMLPost.XMLPost as XMLPost 
 import MapServerText as UMN
 import DataSet as GDAL
 
 DEBUG = True
 
-###########################################################
-
-class Tags:
-    
-    preRef  = "<wps:Reference"
-    preId   = "<ows:Identifier>"
-    sufId   = "</ows:Identifier>"
-    preLit  = "<wps:LiteralData>"
-    sufLit  = "</wps:LiteralData>"
-    preCplx = "<wps:ComplexData"
-    sufCplx = "</wps:ComplexData>"
-    preAck  = "<wps:ProcessAccepted>"
-    preFail = "<wps:ProcessFailed>"
-    sufFail = "</wps:ProcessFailed>"
-    preSucc = "<wps:ProcessSucceeded>"
-    preOut  = "<wps:Output>"
-    
-
-###########################################################
-
-class Output:
-    
-    name = None
-    value = None
-    
-    def __init__(self, rawString):
-        
-        self.name = rawString.split(Tags.preId)[1].split(Tags.sufId)[0]
-        
-    
-    def getReferenceValue(self, rawString):
-        
-        if not (Tags.preRef in rawString):
-            if DEBUG: 
-                print "Error: tried to download a non reference output."
-            return;
-        
-        url = rawString.split("wps:Reference href=\"")[1].split("\"")[0]
-        r = urllib2.urlopen(urllib2.Request(url))
-        self.value = r.read()
-        r.close()
-        
-
-###########################################################
-
-class LiteralOutput(Output):
-
-    def __init__(self, rawString):
-
-        Output.__init__(self, rawString)
-        
-        # If the data is included in the string itself
-        if Tags.preLit in rawString:
-            self.value = rawString.split(Tags.preLit)[1].split(">")[1].split(Tags.sufLit)[0].split("</wps:LiteralData")[0] 
-
-        # Otherwise it is a reference
-        else:
-            self.getReferenceValue(rawString)
-
-###########################################################
-
-class ComplexOutput(Output):
-
-    uniqueID = None
-    path = None
-    extension = "gml"
-
-    def __init__(self, rawString, unique):
-
-        Output.__init__(self, rawString)
-        self.uniqueID = unique
-        
-        # If the data is included in the string itself
-        if Tags.preCplx in rawString:
-            
-            self.value = rawString.split(Tags.preCplx)[1].split(Tags.sufCplx)[0]
-            while self.value[0] <> "<":
-                self.value = self.value[1:len(self.value)]
-        
-        # Otherwise it is a reference
-        else:
-            
-            self.extension = rawString.split("mimeType=\"")[1].split("/")[1].split("\"")[0]
-            self.getReferenceValue(rawString)
-            
-
-    def saveToDisk(self, dest):
-        
-        file = None
-        self.path = os.path.join(dest, self.uniqueID + "_" + self.name + "." + self.extension)
-        
-        try:
-            file = open(self.path, 'w')
-            file.write(self.value)
-            print "Saved output file: %s\n" %self.path
-        except Exception, err:
-            print "Error saving %s:\n%s" %(self.path, err)
-        finally:
-            if file <> None:
-                file.close()
-                
-        
-        
 ##########################################################
 
 class WPSClient:
@@ -129,6 +30,8 @@ class WPSClient:
     processName = None
     inputNames = None
     inputValues = None
+    outputNames = None
+    xmlPost = None
     request = None
     statusURL = None
     processId = None
@@ -149,12 +52,13 @@ class WPSClient:
          
         self.loadConfigs()
         
-    def init(self, serverAddress, processName, inputNames, inputValues):
+    def init(self, serverAddress, processName, inputNames, inputValues, outputNames):
         
         self.serverAddress = serverAddress
         self.processName = processName
         self.inputNames = inputNames
         self.inputValues = inputValues
+        self.outputNames = outputNames
         
     def initFromURL(self, url):
         
@@ -195,7 +99,7 @@ class WPSClient:
         self.request  = self.serverAddress
         self.request += "&REQUEST=Execute&IDENTIFIER=" + self.processName
         self.request += "&SERVICE=WPS&VERSION=1.0.0&DATAINPUTS=" + inputs
-        self.request += "&STOREEXECUTERESPONSE=true&STATUS=true"
+        self.request += "&STOREEXECUTERESPONSE=true&STATUS=true"      
         
     def sendRequest(self):
         """ 
@@ -230,6 +134,70 @@ class WPSClient:
         self.processId = self.decodeId(self.statusURL)
         
         return self.statusURL
+    
+    # --------------------------------------------------------------------
+    def buildRequestNew(self):
+        
+        if len(self.inputNames) <> len(self.inputValues):
+            print "Different number of input names and values."
+            return
+        
+        self.xmlPost = XMLPost(self.processName)
+        
+        for i in range(0, len(self.inputNames)):
+            if ("http://" in self.inputValues[i]): 
+                self.xmlPost.addRefInput(self.inputNames[i], self.inputValues[i])
+            else:
+                self.xmlPost.addLiteralInput(self.inputNames[i], self.inputValues[i])
+        
+        for o in self.outputNames:
+            self.xmlPost.addOutput(o)
+            
+    def sendRequestNew(self):
+        
+        self.buildRequestNew()
+        
+        if(self.xmlPost == None):
+            print "It wasn't possible to build a request with the given arguments"
+            return None
+        
+        request = self.xmlPost.getString()
+        if(request == None):
+            print "It wasn't possible to build a request with the given arguments"
+            return None
+        
+        split = self.serverAddress.split("/")
+        
+        if(len(split) < 4):
+            print "It wasn't possible to process the server address"
+            return None
+        
+        host = split[0] + "/" + split[1] + "/" + split[2]
+        
+        api_url = ""
+        for i in range(3, len(split)):
+            api_url += split[i]
+            if (i < (len(self.inputNames) - 1)):
+                api_url +=  "/"
+        
+        api_url = api_url.rsplit()
+        
+        webservice = httplib.HTTP(host)
+        webservice.putrequest("POST", api_url)
+        webservice.putheader("Host", host)
+        webservice.putheader("User-Agent","Python post")
+        webservice.putheader("Content-type", "text/xml; charset=\"UTF-8\"")
+        webservice.putheader("Content-length", "%d" % len(request))
+        webservice.endheaders()
+        webservice.send(request)
+        statuscode, statusmessage, header = webservice.getreply()
+        result = webservice.getfile().read()
+        
+        print statuscode, statusmessage, header
+        print result
+            
+    # -------------------------------------------------------------------
+    
 
     def checkStatus(self):
         
