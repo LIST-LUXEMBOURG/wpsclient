@@ -123,15 +123,15 @@ class ComplexOutput(Output):
 class WPSClient:
     """ """
     
-    UUID = None
     map  = None
     epsg = None
     serverAddress = None
-    processId = None
+    processName = None
     inputNames = None
     inputValues = None
     request = None
     statusURL = None
+    processId = None
     percentCompleted = 0
     resultsComplex = []
     resultsLiteral = []
@@ -145,15 +145,21 @@ class WPSClient:
     imageURL     = ""
     otherProjs   = ""
     
-    def __init__(self, serverAddress, processId, inputNames, inputValues):
+    def __init__(self):
+         
+        self.loadConfigs()
+        
+    def init(self, serverAddress, processName, inputNames, inputValues):
         
         self.serverAddress = serverAddress
-        self.processId = processId
+        self.processName = processName
         self.inputNames = inputNames
         self.inputValues = inputValues
-        self.UUID = uuid.uuid1().__str__()
         
-        self.loadConfigs()
+    def initFromURL(self, url):
+        
+        self.statusURL = url
+        self.processId = self.decodeId(url)
         
     def loadConfigs(self):
         """ Loads default values from the configuration file. """
@@ -169,6 +175,11 @@ class WPSClient:
         self.imageURL     = parser.get('MapServer', 'imgeURL')
         self.otherProjs   = parser.get('MapServer', 'otherProjs')
         
+    def decodeId(self, url):
+        
+        s = url.split("/")
+        return s[len(s) - 1].split(".")[0] 
+        
     def buildRequest(self):
         
         if len(self.inputNames) <> len(self.inputValues):
@@ -182,7 +193,7 @@ class WPSClient:
                 inputs += ";"
                 
         self.request  = self.serverAddress
-        self.request += "&REQUEST=Execute&IDENTIFIER=" + self.processId
+        self.request += "&REQUEST=Execute&IDENTIFIER=" + self.processName
         self.request += "&SERVICE=WPS&VERSION=1.0.0&DATAINPUTS=" + inputs
         self.request += "&STOREEXECUTERESPONSE=true&STATUS=true"
         
@@ -196,7 +207,7 @@ class WPSClient:
         
         if(self.request == None):
             print "It wasn't possible to build a request with the given arguments"
-            return
+            return None
 
         if DEBUG:
             print "Starting download of %s" %self.request
@@ -213,9 +224,12 @@ class WPSClient:
         if not (Tags.preAck in self.xmlResponse):
             print "Failed to start process at the remote server with following message:\n"
             print self.xmlResponse
-            return
+            return None
         
         self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
+        self.processId = self.decodeId(self.statusURL)
+        
+        return self.statusURL
 
     def checkStatus(self):
         
@@ -251,12 +265,12 @@ class WPSClient:
             if o.count(Tags.preLit) > 0:
                 self.resultsLiteral.append(LiteralOutput(o))
             elif o.count(Tags.preCplx) > 0:
-                self.resultsComplex.append(ComplexOutput(o, self.UUID))
+                self.resultsComplex.append(ComplexOutput(o, self.processId))
             # Reference outputs
             elif o.count(Tags.preRef) > 0:
                 # Assumes that Complex outputs have a mimeType
                 if o.count("mimeType") > 0:
-                    self.resultsComplex.append(ComplexOutput(o, self.UUID))
+                    self.resultsComplex.append(ComplexOutput(o, self.processId))
                 else:
                     self.resultsLiteral.append(LiteralOutput(o))
                     
@@ -272,7 +286,7 @@ class WPSClient:
         :returns: The path to the map file generated.
         """
         
-        self.map = UMN.MapFile(self.UUID)
+        self.map = UMN.MapFile(self.processId)
         
         self.map.shapePath    = self.pathFilesGML
         self.map.epsgCode     = self.epsg

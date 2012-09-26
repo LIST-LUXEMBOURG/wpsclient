@@ -1,27 +1,44 @@
 '''
-Created on Aug 29, 2012
+Created on Sep 26, 2012
 
 @author: desousa
 '''
 
 import WPSClient
+import time
 
-cli = WPSClient.WPSClient(
+iniCli = WPSClient.WPSClient()
+
+print iniCli.decodeId("http://services.iguess.tudor.lu/wpsoutputs/pywps-a3eddbc8-031a-11e2-a36a-005056a512c1.xml")
+
+iniCli.init(
     "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    "ogrbuffer", 
-    ("size", "data"), 
-    ("1", "http%3A%2F%2Fservices.iguess.tudor.lu%2Fpywps%2FsampleData%2FsampleLineRotterdam.xml"))
+    "test_rand_map", 
+    ["delay"], 
+    ["1"])
 
-# Needed because PyWPS deletes CRS information from the outputs
-# Maybe it should be a parameter to the constructor?
-cli.epsg = "28992"
+url = iniCli.sendRequest()
 
-cli.sendRequest()
+iniCli = None
 
-print "Results of sendRequest():"
-print cli.UUID
-print cli.request
+if(url == None):
+    print "Sorry something went wrong."
 
-cli.generateMapFile()
+else:
+    
+    statCli = WPSClient.WPSClient()
+    
+    statCli.initFromURL(url)
 
-print "Generated the map file."
+    while not statCli.checkStatus():
+        print "Waiting..."
+        time.sleep(10)
+    
+    # Needed because PyWPS deletes CRS information from the outputs
+    # Maybe it should be a parameter to the constructor?
+    statCli.epsg = "28992"
+    
+    statCli.generateMapFile()
+    
+    print "Successfully generated the map file:"
+    print statCli.getMapFilePath()
