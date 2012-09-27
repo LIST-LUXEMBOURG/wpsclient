@@ -31,13 +31,15 @@ class DataSet:
 	def __init__(self, path):
 
 		self.dataType = self.getDataSet(path)
+		if self.dataType == None:
+			return
 		self.getSpatialReference()
 		
 		if (DEBUG):
 			print "Read a data set of type " + str(self.dataType)
 			print "It has the following SRS: " + str(self.getEPSG())
 			print "And the following bounds: " + str(self.getBBox())
-			print "First bound: " + str(self.getBBox()[0])
+			#print "First bound: " + str(self.getBBox()[0])
 
 	def getDataSet(self, path):
 		"""
@@ -61,6 +63,7 @@ class DataSet:
 		if self.dataSet:
 			return "vector"
 		else:
+			print "Error importing dataset: " + path
 			return None
 
 	def getSpatialReference(self):
@@ -124,16 +127,6 @@ class DataSet:
 			if "Polygon" in type:
 				return "Polygon"
 		return None
-
-
-# Testing
-
-# x = DataSet("/home/desousa/Tudor/MUSIC/Ludwigsburg/simpleLineLudwigsburgWithCRS.gml")
-
-
-
-
-
 
 
 

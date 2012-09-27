@@ -6,7 +6,7 @@ Created on Sep 26, 2012
 
 import os
 import urllib2
-import WPSTags.WPSTags as Tags
+from Tags import Tags
 
 ###########################################################
 
@@ -27,7 +27,7 @@ class Output:
             return;
         
         url = rawString.split("wps:Reference href=\"")[1].split("\"")[0]
-        r = urllib2.urlopen(urllib2.Request(url))
+        r = urllib2.urlopen(urllib2.Request(urllib2.unquote(url)))
         self.value = r.read()
         r.close()
         

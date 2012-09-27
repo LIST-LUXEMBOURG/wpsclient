@@ -4,16 +4,16 @@ Created on Aug 28, 2012
 @author: Luis de Sousa [luis.desousa@tudor.lu]
 '''
 
-__all__ = ["Output","DataSet","MapServerText"]
+__all__ = ["Tags","Output","DataSet","MapServerText"]
 
 import os
 import urllib2
 import httplib
 from ConfigParser import SafeConfigParser
-import WPSTags.WPSTags as Tags
-import Output.ComplexOutput as ComplexOutput
-import Output.LiteralOutput as LiteralOutput
-import XMLPost.XMLPost as XMLPost 
+from Tags import Tags
+from Output import ComplexOutput
+from Output import LiteralOutput
+from XMLPost import XMLPost
 import MapServerText as UMN
 import DataSet as GDAL
 
@@ -90,58 +90,6 @@ class WPSClient:
             print "Different number of input names and values."
             return
         
-        inputs = ""
-        for i in range(0, len(self.inputNames)):
-            inputs += self.inputNames[i] + "=" + self.inputValues[i]
-            if (i < (len(self.inputNames) - 1)):
-                inputs += ";"
-                
-        self.request  = self.serverAddress
-        self.request += "&REQUEST=Execute&IDENTIFIER=" + self.processName
-        self.request += "&SERVICE=WPS&VERSION=1.0.0&DATAINPUTS=" + inputs
-        self.request += "&STOREEXECUTERESPONSE=true&STATUS=true"      
-        
-    def sendRequest(self):
-        """ 
-        It is inspired on this page:
-        http://stpreAckoverflow.com/questions/862173/how-to-download-a-file-using-python-in-a-smarter-way/863017#863017
-        """       
-        
-        self.buildRequest()
-        
-        if(self.request == None):
-            print "It wasn't possible to build a request with the given arguments"
-            return None
-
-        if DEBUG:
-            print "Starting download of %s" %self.request
-    
-        r = urllib2.urlopen(urllib2.Request(self.request))
-        self.xmlResponse = r.read()
-        r.close()
-        
-        if DEBUG:
-            print "First response:\n"
-            print self.xmlResponse
-            
-        #Check if the process was accepted
-        if not (Tags.preAck in self.xmlResponse):
-            print "Failed to start process at the remote server with following message:\n"
-            print self.xmlResponse
-            return None
-        
-        self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
-        self.processId = self.decodeId(self.statusURL)
-        
-        return self.statusURL
-    
-    # --------------------------------------------------------------------
-    def buildRequestNew(self):
-        
-        if len(self.inputNames) <> len(self.inputValues):
-            print "Different number of input names and values."
-            return
-        
         self.xmlPost = XMLPost(self.processName)
         
         for i in range(0, len(self.inputNames)):
@@ -153,9 +101,9 @@ class WPSClient:
         for o in self.outputNames:
             self.xmlPost.addOutput(o)
             
-    def sendRequestNew(self):
+    def sendRequest(self):
         
-        self.buildRequestNew()
+        self.buildRequest()
         
         if(self.xmlPost == None):
             print "It wasn't possible to build a request with the given arguments"
@@ -166,21 +114,23 @@ class WPSClient:
             print "It wasn't possible to build a request with the given arguments"
             return None
         
-        split = self.serverAddress.split("/")
+        rest = self.serverAddress.replace("http://", "")     
+        split = rest.split("/")
         
-        if(len(split) < 4):
+        if(len(split) < 2):
             print "It wasn't possible to process the server address"
             return None
         
-        host = split[0] + "/" + split[1] + "/" + split[2]
+        host = split[0]
         
-        api_url = ""
-        for i in range(3, len(split)):
-            api_url += split[i]
-            if (i < (len(self.inputNames) - 1)):
-                api_url +=  "/"
+        api_url = rest.replace(host, "", 1)        
+        api_url = api_url.replace("?", "")
         
-        api_url = api_url.rsplit()
+        if DEBUG:
+            print "API: " + api_url
+            print "HOST: " + host
+            print "Sending the request:\n"
+            print request + "\n"
         
         webservice = httplib.HTTP(host)
         webservice.putrequest("POST", api_url)
@@ -191,13 +141,17 @@ class WPSClient:
         webservice.endheaders()
         webservice.send(request)
         statuscode, statusmessage, header = webservice.getreply()
-        result = webservice.getfile().read()
+        self.xmlResponse = webservice.getfile().read()
         
-        print statuscode, statusmessage, header
-        print result
-            
-    # -------------------------------------------------------------------
-    
+        if DEBUG:
+            print "Request results:"
+            print statuscode, statusmessage, header
+            print self.xmlResponse
+        
+        self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
+        self.processId = self.decodeId(self.statusURL)
+        
+        return self.statusURL  
 
     def checkStatus(self):
         
@@ -224,8 +178,8 @@ class WPSClient:
             return False
         
         if DEBUG:
-            print "The process has finished successfully. \n \
-            Processing the results..."
+            print "The process has finished successfully."
+            print "Processing the results..."
         
         #Process the results
         outVector = self.xmlResponse.split(Tags.preOut)

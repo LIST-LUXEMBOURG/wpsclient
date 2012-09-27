@@ -4,6 +4,8 @@ Created on Sep 26, 2012
 @author: desousa
 '''
 
+import urllib2
+
 class XMLPost:
     
     inputs = []
@@ -59,6 +61,7 @@ class XMLPost:
         s += "  </wps:ResponseDocument>\n"
         s += " </wps:ResponseForm>\n"
         s += "</wps:Execute>\n"
+        return s
         
     def getString(self):
         

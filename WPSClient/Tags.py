@@ -6,7 +6,7 @@ Created on Sep 26, 2012
 
 ###########################################################
 
-class WPSTags:
+class Tags:
     
     preRef  = "<wps:Reference"
     preId   = "<ows:Identifier>"
