@@ -2,6 +2,19 @@
 Created on Aug 28, 2012
 
 @author: Luis de Sousa [luis.desousa@tudor.lu]
+
+This package provides tools to manage requests to a remote process server using
+the Web Processing Service standard [1]. The outputs of these requests are 
+fetched and published to a local map service, assuming they are of a spatial 
+character when complex. The map service used is MapServer [2].
+Parts of this code are inspired on the PyWPS [3] project, whose developers had
+a relevant role in some of the solutions here coded.  
+This package is released under the GPL-3.0 open source license [4].
+
+[1] http://www.opengeospatial.org/standards/wps
+[2] http://www.mapserver.org
+[2] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
+[3] http://opensource.org/licenses/GPL-3.0
 '''
 
 __all__ = ["Tags","Output","DataSet","MapServerText"]
@@ -22,37 +35,118 @@ DEBUG = True
 ##########################################################
 
 class WPSClient:
-    """ """
+    """ 
+    This class manages the WPS request, status checking and results 
+    processing cycle. 
     
-    map  = None
-    epsg = None
+    .. attribute:: serverAddress
+        Address of the WPS server where the process to invoke resides
+        
+    .. attribute:: processName
+        Name of the process to invoke
+    
+    .. attribute:: inputNames
+        List with the names of input arguments of the process
+    
+    .. attribute:: inputValues
+        List with the values to pass as arguments to the process
+    
+    .. attribute:: outputNames
+        List with the names of the process outputs. Needed to build the XML
+        request
+    
+    .. attribute:: xmlPost
+        Object of the type XMLPost containing the request coded as XML sent 
+        to the WPS server as an HTTP Post 
+    
+    .. attribute:: statusURL
+        URL of the remote XML file where the process updates its status and 
+        writes its results after completion
+    
+    .. attribute:: processId
+        Identifier of the remote process, part of statusURL used to identify
+        the results stored locally
+    
+    .. attribute:: percentCompleted
+        Percentage of process completion, as reported in the status XML file
+    
+    .. attribute:: resultsComplex
+        Vector of ComplexOutput objects harbouring the complex results produced
+        by the remote process
+    
+    .. attribute:: resultsLiteral
+        Vector of LiteralOutput objects harbouring the complex results produced
+        by the remote process
+    
+    .. attribute:: map
+        Object of type MapFile used to generate the map file publishing complex
+        outputs through MapServer
+    
+    .. attribute:: epsg
+        EPSG code of the primary coordinate system used to publish complex 
+        outputs
+    
+    .. attribute:: pathFilesGML
+        Path where to store the GML files with complex outputs
+    
+    .. attribute:: mapServerURL
+        URL of the MapServer instance to use
+    
+    .. attribute:: mapFilesPath
+        Path where to write the map file (folder used by MapServer)
+    
+    .. attribute:: mapTemplate
+        Path to the MapServer map template folder
+    
+    .. attribute:: imagePath
+        Path to the MapServer image folder
+    
+    .. attribute:: imageURL
+        URL to MapServer images folder
+    
+    .. attribute:: otherProjs
+        String listing EPSG codes of further coordinate systems with which to
+        publish the complex outputs
+    """
+    
     serverAddress = None
     processName = None
     inputNames = None
     inputValues = None
     outputNames = None
     xmlPost = None
-    request = None
     statusURL = None
     processId = None
     percentCompleted = 0
     resultsComplex = []
     resultsLiteral = []
+    map  = None
+    epsg = None
     
     #Configs
-    pathFilesGML = ""
-    mapServerURL = ""
-    mapFilesPath = ""
-    mapTemplate  = ""
-    imagePath    = ""
-    imageURL     = ""
-    otherProjs   = ""
+    pathFilesGML = None
+    mapServerURL = None
+    mapFilesPath = None
+    mapTemplate  = None
+    imagePath    = None
+    imageURL     = None
+    otherProjs   = None
     
     def __init__(self):
          
         self.loadConfigs()
         
     def init(self, serverAddress, processName, inputNames, inputValues, outputNames):
+        """
+        Initialises the WPSClient object with the required arguments to create
+        the WPS request.
+        
+        :param serverAddress: string with the address of the remote WPS server
+        :param processName: string with process name
+        :param inputNames: list of strings with input names
+        :param inputValues: list of strings with input values
+        :param outputNames: list of strings with output names       
+        """
         
         self.serverAddress = serverAddress
         self.processName = processName
@@ -61,12 +155,20 @@ class WPSClient:
         self.outputNames = outputNames
         
     def initFromURL(self, url):
+        """
+        Initialises the WPSClient with the status URL address of a running 
+        remote process. Used when a request has already been sent.
+        
+        :param url: string with the status URL address of a remote process      
+        """
         
         self.statusURL = url
         self.processId = self.decodeId(url)
         
     def loadConfigs(self):
-        """ Loads default values from the configuration file. """
+        """ 
+        Loads default attribute values from the configuration file. 
+        """
         
         parser = SafeConfigParser()
         parser.read('WPSClient.cfg')
@@ -80,11 +182,21 @@ class WPSClient:
         self.otherProjs   = parser.get('MapServer', 'otherProjs')
         
     def decodeId(self, url):
+        """
+        Decodes the remote process identifier from the status URL.
+        
+        :param: string with the status URL address of a remote process
+        :returns: string with the process identifier  
+        """
         
         s = url.split("/")
         return s[len(s) - 1].split(".")[0] 
         
     def buildRequest(self):
+        """
+        Creates the XMLPost object encoding the XML request to the WPS server,
+        storing it in the xmlPost attribute. 
+        """
         
         if len(self.inputNames) <> len(self.inputValues):
             print "Different number of input names and values."
@@ -102,6 +214,13 @@ class WPSClient:
             self.xmlPost.addOutput(o)
             
     def sendRequest(self):
+        """
+        Sends the XML request encoded by the xmlPost attribute to the remote 
+        WPS server through an HTTP Post. Process the response by storing the
+        status URL and the process in the statusURL and processId attributes.
+        
+        :returns: string with the status URL, None in case of error
+        """
         
         self.buildRequest()
         
@@ -154,6 +273,15 @@ class WPSClient:
         return self.statusURL  
 
     def checkStatus(self):
+        """
+        Sends a request to the status URL checking the progress of the remote 
+        process. If the process has finished creates the necessary Output 
+        objects to fetch the results and stores them in the resultsLiteral and
+        resultsComplex attributes.
+        
+        :returns: True if succeeded, False in case of error
+        :rtype: Boolean
+        """
         
         if (self.statusURL == None):
             print "To soon to ask for status"
@@ -205,7 +333,10 @@ class WPSClient:
         
     def generateMapFile(self):
         """
-        :returns: The path to the map file generated.
+        Creates the MapFile object that encodes a map file publishing the 
+        complex outputs and writes it to disk.
+        
+        :returns: string with the path to the map file generated.
         """
         
         self.map = UMN.MapFile(self.processId)
@@ -251,6 +382,10 @@ class WPSClient:
         return self.map.filePath()
         
     def getMapFilePath(self):
+        """
+        Is this method really needed?
+        :returns: string with the path to the generated mapfile
+        """
        
         if self.map <> None:
             return self.map.filePath()

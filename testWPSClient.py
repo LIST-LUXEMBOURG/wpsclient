@@ -9,8 +9,6 @@ import time
 
 iniCli = WPSClient.WPSClient()
 
-print iniCli.decodeId("http://services.iguess.tudor.lu/wpsoutputs/pywps-a3eddbc8-031a-11e2-a36a-005056a512c1.xml")
-
 # Basic test with literal inputs
 #iniCli.init(
 #    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
@@ -29,10 +27,15 @@ print iniCli.decodeId("http://services.iguess.tudor.lu/wpsoutputs/pywps-a3eddbc8
 
 # Test with a WFS resource
 iniCli.init(
+    # Process Server address
     "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
     "buffer", 
+    # Input names
     ["size","data"], 
+    # Input values - '&' character must be passed as '&amp;'
     ["5","http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/Europe4326.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=testLines4326&amp;srsName=EPSG:900913&amp;MAXFEATURES=10"],
+    # Output names
     ["buffer"])
 
 url = iniCli.sendRequest()
