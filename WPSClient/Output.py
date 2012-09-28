@@ -1,7 +1,10 @@
 '''
 Created on Sep 26, 2012
 
-@author: desousa
+@author: Luis de Sousa [luis.desousa@tudor.lu]
+
+Module containing the Output classes. These classes provided methods to fetch
+and store locally the results of a remote WPS process.
 '''
 
 import os
@@ -11,6 +14,18 @@ from Tags import Tags
 ###########################################################
 
 class Output:
+    """
+    Abstract class with generic elements of a WPS output.
+    
+    :param rawString: the section of the WPS process XML response corresponding
+    to this output
+    
+    .. attribute:: name
+        Name of the output
+    
+    .. value:: mapServerURL
+        Value of the output
+    """
     
     name = None
     value = None
@@ -21,6 +36,13 @@ class Output:
         
     
     def getReferenceValue(self, rawString):
+        """
+        Fetches the output value from the remote WPS server in case it has been
+        return as a reference.
+        
+        :param rawString: the section of the WPS process XML response corresponding
+        to this output
+        """
         
         if not (Tags.preRef in rawString):
             print "Error: tried to download a non reference output."
@@ -35,6 +57,12 @@ class Output:
 ###########################################################
 
 class LiteralOutput(Output):
+    """
+    Literal output of WPS process.
+    
+    :param rawString: the section of the WPS process XML response corresponding
+    to this output
+    """
 
     def __init__(self, rawString):
 
@@ -51,6 +79,24 @@ class LiteralOutput(Output):
 ###########################################################
 
 class ComplexOutput(Output):
+    """
+    Complex output of WPS process.
+    
+    :param rawString: the section of the WPS process XML response corresponding
+    to this output
+    
+    :para unique: unique identifier of the process that generated the output
+            
+    .. attribute:: uniqueID
+        Unique identifier used in the name of the file storing the output
+    
+    .. value:: path
+        Path where the output file is saved
+
+    .. value:: extension
+        Extension of the output file
+
+    """
 
     uniqueID = None
     path = None
@@ -76,6 +122,11 @@ class ComplexOutput(Output):
             
 
     def saveToDisk(self, dest):
+        """
+        Saves the output value to disk.
+        
+        :param dest: string with path where to save the output value
+        """
         
         file = None
         self.path = os.path.join(dest, self.uniqueID + "_" + self.name + "." + self.extension)

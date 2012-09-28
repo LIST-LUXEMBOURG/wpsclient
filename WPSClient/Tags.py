@@ -1,7 +1,9 @@
 '''
 Created on Sep 26, 2012
 
-@author: desousa
+@author: Luis de Sousa [luis.desousa@tudor.lu]
+
+Contains the WPS XML tags needed to parse the outputs of a WPS process. 
 '''
 
 ###########################################################

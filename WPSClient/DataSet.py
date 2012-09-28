@@ -3,12 +3,10 @@ Created on Aug 21, 2012
 
 @author: Luis de Sousa [luis.desousa@tudor.lu]
 
-Contains a class that wraps spatial data sets stored in the disk.
-Provides methods to retrieve useful information on the data set.
+Module providing tools to retrieve information from spatial datasets stored 
+in the disk. This code is inspired in the UMN module of the PyWPS process [1].
 
-Issues:
-. Only tested with vector GML files
-
+[1] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
 '''
 
 gdal=False
@@ -22,7 +20,21 @@ from osgeo import osr
 DEBUG = True
 
 class DataSet:
-	""" """
+	"""
+	Wraps spatial data sets stored in the disk. Provides methods to retrieve 
+	useful information on the data set. 
+	
+	:param path: string with the path to the physical data set.
+		
+	.. attribute:: dataSet
+		GDAL object wraping the spatial data set
+			
+	.. attribute:: dataType
+		Data set type: "raster" or "vector"
+			
+	.. attribute:: spatialReference
+		EPSG code of the coordinate system used by data set 
+	"""
 
 	dataSet=None
 	dataType=None
@@ -43,8 +55,12 @@ class DataSet:
 
 	def getDataSet(self, path):
 		"""
-		:param path: String
-		:returns: "raster" or "vector"
+		Attempts to create a GDAL object wrapping the spatial set. Tried to
+		import it first as a raster and then as vector and stores it in the
+		dataSet attribute.
+		
+		:param path: string with the path to the physical data set 
+		:returns: "raster" or "vector", None in case of error
 		"""
 
 		#logging.debug("Importing given output [%s] using gdal" % output.value)
@@ -68,7 +84,8 @@ class DataSet:
 
 	def getSpatialReference(self):
 		"""
-		Loads the Spatial Reference System definition.
+		Loads the Spatial Reference System defined in the data set, storing it
+		in the spatialReference attribute.
 		"""
 
 		sr = osr.SpatialReference()
@@ -85,7 +102,7 @@ class DataSet:
 
 	def getEPSG(self):
 		"""
-		:return: Spatial Reference System EPSG code
+		:returns: Spatial Reference System EPSG code
 		"""
 
 		code=None
@@ -100,7 +117,7 @@ class DataSet:
 
 	def getBBox(self):
 		"""
-		:return: bounding box of the dataset
+		:returns: bounding box of the dataset
 		"""
 
 		if self.dataType == "raster":
@@ -116,6 +133,10 @@ class DataSet:
 			return layer.GetExtent()
 		
 	def getGeometryType(self):
+		"""
+		:returns: string with type of geometry in a vector layer: "Point", 
+		"Line" or "Polygon"
+		"""
 		
 		layer = self.dataSet.GetLayer()
 		if layer <> None:

@@ -13,8 +13,8 @@ This package is released under the GPL-3.0 open source license [4].
 
 [1] http://www.opengeospatial.org/standards/wps
 [2] http://www.mapserver.org
-[2] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
-[3] http://opensource.org/licenses/GPL-3.0
+[3] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
+[4] http://opensource.org/licenses/GPL-3.0
 '''
 
 __all__ = ["Tags","Output","DataSet","MapServerText"]
