@@ -61,5 +61,9 @@ else:
     
     statCli.generateMapFile()
     
-    print "Successfully generated the map file:"
-    print statCli.getMapFilePath()
+    
+    
+    
+    
+    
+    
