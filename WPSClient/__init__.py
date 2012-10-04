@@ -29,6 +29,7 @@ from Output import LiteralOutput
 from XMLPost import XMLPost
 import MapServerText as UMN
 import DataSet as GDAL
+import re  # For regular expression matching
 
 DEBUG = True
 
@@ -131,6 +132,10 @@ class WPSClient:
     imagePath    = None
     imageURL     = None
     otherProjs   = None
+
+    RUNNING = 1
+    FINISHED = 2
+    ERROR = 3
     
     def __init__(self):
          
@@ -283,34 +288,55 @@ class WPSClient:
         :rtype: Boolean
         """
         
+        self.processError = ""
+        self.processErrorCode = ""
+        self.processErrorText = ""
+        self.status = 0                     # 1 == Running, 2 == Done, 3 == Error
+
         if (self.statusURL == None):
-            print "To soon to ask for status"
+            print "Incomplete request -- missing URL"
             return False
         
         r = urllib2.urlopen(urllib2.Request(self.statusURL))
         self.xmlResponse = r.read()
         r.close()
         
-        #Check if the process failed
+        # Check if the process failed
         if (Tags.preFail in self.xmlResponse):
-            print "The process failed with the following message:"
-            print self.xmlResponse.split(Tags.preFail)[1].split(Tags.sufFail)[0]
+            self.status = self.ERROR
+            self.processError = self.xmlResponse.split(Tags.preFail)[1].split(Tags.sufFail)[0]
+
+            #                                             group1                     group2                          DOTALL makes multiline match easier
+            m = re.search('<ows:Exception.+exceptionCode="([^"]+).+<ows:ExceptionText>(.+)</ows:ExceptionText>', self.processError, re.DOTALL)
+            if m:
+                self.processErrorCode = m.group(1)
+                self.processErrorText = m.group(2).strip()
+            else:
+                self.processErrorCode = "Unknown"
+                self.processErrorText = "Unknown"
+
+            if DEBUG:
+                print "The process failed with the following message:"
+                print self.processErrorText
+
             return True
            
-        #Check if the process has finished
+        # Check if the process has finished
         if not (Tags.preSucc in self.xmlResponse):
+            self.status = self.RUNNING
             print "The process hasn't finished yet."
             if ("percentCompleted" in self.xmlResponse):
                 self.percentCompleted = self.xmlResponse.split("percentCompleted=\"")[1].split("\"")[0]
                 print str(self.percentCompleted) + " % of the execution complete."
-            return False
+            return True
         
         if DEBUG:
             print "The process has finished successfully."
             print "Processing the results..."
         
-        #Process the results
+        # Process the results
         outVector = self.xmlResponse.split(Tags.preOut)
+        self.status = self.FINISHED
         for o in outVector:
             if o.count(Tags.preLit) > 0:
                 self.resultsLiteral.append(LiteralOutput(o))
