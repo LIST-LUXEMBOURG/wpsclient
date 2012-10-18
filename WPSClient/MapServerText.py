@@ -79,20 +79,30 @@ class MapFile:
         bBox attribute
         """
         
-        if len(self.layers) > 0:
-            self.bBox = self.layers[0].bBox
-        else:
+#        if len(self.layers) > 0:
+#            self.bBox = self.layers[0].bBox
+#        else:
+#            return
+        
+        if len(self.layers) <= 0:
             return
         
+        minX = self.layers[0].bBox[0]
+        maxX = self.layers[0].bBox[1]
+        minY = self.layers[0].bBox[2]
+        maxY = self.layers[0].bBox[3]
+        
         for i in range (1,len(self.layers)):
-            if self.layers[i].bBox[0] < self.bBox[0]:
-                self.bBox[0] = self.layers[i].bBox[0]
-            if self.layers[i].bBox[1] < self.bBox[1]:
-                self.bBox[1] = self.layers[i].bBox[1]
-            if self.layers[i].bBox[2] > self.bBox[2]:
-                self.bBox[2] = self.layers[i].bBox[2]
-            if self.layers[i].bBox[3] > self.bBox[3]:
-                self.bBox[3] = self.layers[i].bBox[3]
+            if self.layers[i].bBox[0] < minX:
+                minX = self.layers[i].bBox[0]
+            if self.layers[i].bBox[1] > maxX:
+                maxX = self.layers[i].bBox[1]
+            if self.layers[i].bBox[2] < minY:
+                minY = self.layers[i].bBox[2]
+            if self.layers[i].bBox[3] > maxY:
+                maxY = self.layers[i].bBox[3]
+                
+        self.bBox = (minX, minY, maxX, maxY)
                                     
     def mapHeader(self):
         """

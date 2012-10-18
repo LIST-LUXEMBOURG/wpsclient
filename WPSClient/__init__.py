@@ -344,7 +344,7 @@ class WPSClient:
             if ("percentCompleted" in self.xmlResponse):
                 self.percentCompleted = self.xmlResponse.split("percentCompleted=\"")[1].split("\"")[0]
                 logging.info(str(self.percentCompleted) + " % of the execution complete.")
-            return True
+            return False
         
         logging.debug("The process has finished successfully.\nProcessing the results...")
         
