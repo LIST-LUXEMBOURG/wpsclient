@@ -121,6 +121,17 @@ class MapFile:
         text += "  PROJECTION \n"
         text += "   \"init=epsg:" + self.epsgCode + "\"\n"
         text += "  END \n\n"
+        
+        text += "  IMAGETYPE      GTiff \n\n"
+
+        text += "  OUTPUTFORMAT \n"
+        text += "    NAME GTiff \n"
+        text += "    DRIVER \"GDAL/GTiff\" \n"
+        text += "    MIMETYPE \"image/tiff\" \n"
+        text += "    IMAGEMODE FLOAT32 \n"
+        text += "    EXTENSION \"tif\" \n"
+        text += "    FORMATOPTION \"FILENAME=WCSoutput.tif\" \n"
+        text += "  END \n\n"
 
         text += "WEB \n"
         text += "  TEMPLATE  \"" + self.mapTemplate + "\"\n"
@@ -266,7 +277,7 @@ class RasterLayer(Layer):
         text += "    PROCESSING \"SCALE=AUTO\" \n\n"
         
         text += "    METADATA \n"
-        text += "      \"wms_title\" \"" + self.name + "\" \n"
+        text += "      \"ows_title\" \"" + self.name + "\" \n"
         text += "      \"ows_abstract\" \"" + self.title + "\"\n\n"
         text += "      \"wcs_label\"           \"" + self.name + "\"   ### required \n"
         text += "      \"wcs_rangeset_name\"   \"Range 1\"  ### required to support DescribeCoverage request \n"
@@ -319,6 +330,7 @@ class VectorLayer(Layer):
         text += "  METADATA \n"
         text += "    \"DESCRIPTION\" \"" + self.name + "\"\n"
         text += "    \"ows_title\"   \"" + self.name + "\"\n"
+        text += "    \"gml_include_items\" \"all\" \n"
         text += "  END  # Metadata \n\n"
 
         text += "    CLASS \n"
