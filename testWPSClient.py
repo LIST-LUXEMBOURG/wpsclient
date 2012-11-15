@@ -18,12 +18,12 @@ iniCli = WPSClient.WPSClient()
 #    ["rand", "region", "num"])
 
 # Test with a remote GML resource
-iniCli.init(
-    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    "buffer", 
-    ["size","data"], 
-    ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
-    ["buffer"])
+#iniCli.init(
+#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#    "buffer", 
+#    ["size","data"], 
+#    ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
+#    ["buffer"])
 
 # Test with a WFS resource
 #iniCli.init(
@@ -67,6 +67,18 @@ iniCli.init(
 #    # Output names
 #    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"])
 
+## Test with slope and aspect process
+iniCli.init(
+    # Process Server address
+    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
+    "slope_aspect", 
+    # Input names
+    ["dem"], 
+    # Input values - '&' character must be passed as '&amp;'
+    ["http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm_mini&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1"],
+    # Output names
+    ["slope", "aspect"])
 
 
 url = iniCli.sendRequest()
