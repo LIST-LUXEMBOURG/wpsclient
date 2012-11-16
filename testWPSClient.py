@@ -65,7 +65,8 @@ iniCli = WPSClient.WPSClient()
 #     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_building_footprints_mini&amp;srsName=EPSG:28992",
 #     "type"],
 #    # Output names
-#    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"])
+#    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"],
+#    ["aspectMap","slopeMap","usefulRoofAreas"])
 
 ## Test with solar cadastre single process
 iniCli.init(
@@ -83,7 +84,9 @@ iniCli.init(
      "7"
      ],
     # Output names
-    ["solar_irradiation"])
+    ["solar_irradiation"],
+    #Output titles
+    ["MySolarIrradiationMap"])
 
 
 url = iniCli.sendRequest()
