@@ -88,12 +88,10 @@ iniCli = WPSClient.WPSClient()
 #    #Output titles
 #    ["MySolarIrradiationMap"])
 
-
+url = ""
 #url = iniCli.sendRequest()
 #
 #iniCli = None
-
-url = "fake"
 
 if(url == None):
     print "Sorry something went wrong with the request."
