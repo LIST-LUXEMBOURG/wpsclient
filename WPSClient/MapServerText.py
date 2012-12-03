@@ -278,6 +278,8 @@ class RasterLayer(Layer):
         text += "    TYPE RASTER  \n"
         text += "    STATUS OFF \n"
         text += "    DATA " + self.path + "\n"
+        text += "    TEMPLATE \"blank.html\"\n"
+        text += "    DUMP TRUE\n"
         text += "    PROCESSING \"SCALE=AUTO\" \n\n"
         
         text += "    METADATA \n"
@@ -286,6 +288,8 @@ class RasterLayer(Layer):
         text += "      \"wcs_label\"           \"" + self.name + "\"   ### required \n"
         text += "      \"wcs_rangeset_name\"   \"Range 1\"  ### required to support DescribeCoverage request \n"
         text += "      \"wcs_rangeset_label\"  \"My Label\" ### required to support DescribeCoverage request \n"
+        text += "      \"gml_include_items\" \"all\" \n"
+        text += "      \"wms_include_items\" \"all\"\n"
         text += "    END \n"
         text += "  END \n"
         
@@ -330,11 +334,14 @@ class VectorLayer(Layer):
         #text += "    DATA         " + self.name + "\n"
         text += "    STATUS         OFF \n"
         text += "    TYPE           " + str(self.layerType) + "\n"
+        text += "    TEMPLATE \"blank.html\"\n"
+        text += "    DUMP TRUE\n"
 
         text += "  METADATA \n"
         text += "    \"DESCRIPTION\" \"" + self.name + "\"\n"
         text += "    \"ows_title\"   \"" + self.title + "\"\n"
         text += "    \"gml_include_items\" \"all\" \n"
+        text += "    \"wms_include_items\" \"all\"\n"
         text += "  END  # Metadata \n\n"
 
         text += "    CLASS \n"
