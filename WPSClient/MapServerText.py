@@ -262,11 +262,39 @@ class RasterLayer(Layer):
         extent of the spatial data set
     :param epsg: string with EPSG code of the coordinate system of this layer
     :param nameInit: string with layer name
+        
+    .. attribute:: maxVal
+        Maximum value of this layer
+            
+    .. attribute:: minVal
+        Minimum value of this layer
+            
+    .. attribute:: maxCol
+        RGB colour used to portrait the maximum value of this layer
+            
+    .. attribute:: minCol
+        RGB colour used to portrait the minimum value of this layer
     """
+    
+    maxVal = None
+    minVal = None
+    maxCol = "128 0 0"
+    minCol = "0 255 255"
     
     def __init__(self, path, bounds, epsg, nameInit = "TestLayer", title = "Test layer"):
         
         Layer.__init__(self, path, bounds, epsg, nameInit, title) 
+        
+    def setBounds(self, boundMax, boundMin):
+        """
+        Sets the minimum and maximum values of this layer.
+        
+        :param boundMax: the maximum value of this layer
+        :param boundMax: the minimum value of this layer
+        """
+        
+        self.maxVal = boundMax
+        self.minVal = boundMin
         
     def getString(self):
         """
@@ -290,7 +318,18 @@ class RasterLayer(Layer):
         text += "      \"wcs_rangeset_label\"  \"My Label\" ### required to support DescribeCoverage request \n"
         text += "      \"gml_include_items\" \"all\" \n"
         text += "      \"wms_include_items\" \"all\"\n"
-        text += "    END \n"
+        text += "    END \n\n"
+        
+        if ((self.minVal <> None) and (self.maxVal <> None)):
+            text += "    CLASS \n"
+            text += "        NAME \"ColourRamp\" \n"
+            text += "        EXPRESSION ([pixel] >= " + str(self.minVal) + " and [pixel] <= " + str(self.maxVal) + ") \n"
+            text += "        STYLE \n"
+            text += "            COLORRANGE " + self.minCol + " " + self.maxCol + "\n"
+            text += "            DATARANGE " + str(self.minVal) + " " + str(self.maxVal) + "\n"
+            text += "        END \n"
+            text += "    END \n\n"
+        
         text += "  END \n"
         
         return text 

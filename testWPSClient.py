@@ -51,22 +51,22 @@ iniCli = WPSClient.WPSClient()
 #    # Output names
 #    ["answer"])
 
-## Test with solar cadastre segmentation
-#iniCli.init(
-#    # Process Server address
-#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-#    # Process name
-#    "solar_cadastre_segment", 
-#    # Input names
-#    ["dsm","roof_training_area","building_footprints","roof_training_area_col"], 
-#    # Input values - '&' character must be passed as '&amp;'
-#    ["http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm_mini&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1",
-#     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_training_areas_mini&amp;srsName=EPSG:28992",
-#     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_building_footprints_mini&amp;srsName=EPSG:28992",
-#     "type"],
-#    # Output names
-#    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"],
-#    ["aspectMap","slopeMap","usefulRoofAreas"])
+# Test with solar cadastre segmentation
+iniCli.init(
+    # Process Server address
+    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
+    "solar_cadastre_segment", 
+    # Input names
+    ["dsm","roof_training_area","building_footprints","roof_training_area_col"], 
+    # Input values - '&' character must be passed as '&amp;'
+    ["http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm_mini&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1",
+     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_training_areas_mini&amp;srsName=EPSG:28992",
+     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_building_footprints_mini&amp;srsName=EPSG:28992",
+     "type"],
+    # Output names
+    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"],
+    ["aspectMap","slopeMap","usefulRoofAreas"])
 
 ## Test with solar cadastre single process
 #iniCli.init(
@@ -89,9 +89,9 @@ iniCli = WPSClient.WPSClient()
 #    ["MySolarIrradiationMap"])
 
 url = ""
-#url = iniCli.sendRequest()
-#
-#iniCli = None
+url = iniCli.sendRequest()
+
+iniCli = None
 
 if(url == None):
     print "Sorry something went wrong with the request."
@@ -100,10 +100,10 @@ else:
     
     statCli = WPSClient.WPSClient()
     
-    #statCli.initFromURL(url)
-    statCli.initFromURL('http://services.iguess.tudor.lu/wpsoutputs/pywps-7f8394a2-2ff3-11e2-8730-005056a512c1.xml',
-                        ["solar_irradiation"],
-                        ["MySolarIrradiationMap"])
+    statCli.initFromURL(url,["solar_irradiation"],["MySolarIrradiationMap"])
+#    statCli.initFromURL('http://services.iguess.tudor.lu/wpsoutputs/pywps-7f8394a2-2ff3-11e2-8730-005056a512c1.xml',
+#                        ["solar_irradiation"],
+#                        ["MySolarIrradiationMap"])
 
     while not statCli.checkStatus():
         print "Waiting..."

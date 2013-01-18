@@ -320,7 +320,12 @@ class WPSClient:
         logging.debug("Request info:" + str(statuscode) + str(statusmessage) + str(header))
         logging.debug("Response:\n" + self.xmlResponse)
         
-        self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
+        try:
+            self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
+        except Exception, err:
+            logging.error("No status location URL found in response.")
+            return None
+        
         self.processId = self.decodeId(self.statusURL)
         
         return self.statusURL  
@@ -448,6 +453,7 @@ class WPSClient:
                                             c.dataSet.getEPSG(), 
                                             c.name,
                                             self.outputTitles[c.name])
+                    layer.setBounds(c.dataSet.getMaxValue(), c.dataSet.getMinValue())
                     self.map.addLayer(layer)
                     
                 else:
