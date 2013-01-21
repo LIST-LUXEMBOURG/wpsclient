@@ -127,7 +127,8 @@ class MapFile:
         text += "    NAME GTiff \n"
         text += "    DRIVER \"GDAL/GTiff\" \n"
         text += "    MIMETYPE \"image/tiff\" \n"
-        text += "    IMAGEMODE FLOAT32 \n"
+        # This tag is creating exceptions in MapServer - not clear why. 
+        #text += "    IMAGEMODE FLOAT32 \n"
         text += "    EXTENSION \"tif\" \n"
         text += "    FORMATOPTION \"FILENAME=WCSoutput.tif\" \n"
         text += "  END \n\n"
@@ -277,9 +278,9 @@ class RasterLayer(Layer):
     """
     
     maxVal = None
-    minVal = None
-    maxCol = "128 0 0"
-    minCol = "0 255 255"
+    minVal = None 
+    maxCol = "255 255 96"
+    minCol = "128 0 0"
     
     def __init__(self, path, bounds, epsg, nameInit = "TestLayer", title = "Test layer"):
         

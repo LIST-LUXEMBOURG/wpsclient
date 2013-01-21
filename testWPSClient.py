@@ -10,12 +10,13 @@ import time
 iniCli = WPSClient.WPSClient()
 
 # Basic test with literal inputs
-#iniCli.init(
-#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-#    "test_rand_map", 
-#    ["delay"], 
-#    ["1"],
-#    ["rand", "region", "num"])
+iniCli.init(
+    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    "test_rand_map", 
+    ["delay"], 
+    ["1"],
+    ["rand", "region", "num"],
+    ["rand", "region", "num"])
 
 # Test with a remote GML resource
 #iniCli.init(
@@ -52,21 +53,21 @@ iniCli = WPSClient.WPSClient()
 #    ["answer"])
 
 # Test with solar cadastre segmentation
-iniCli.init(
-    # Process Server address
-    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    # Process name
-    "solar_cadastre_segment", 
-    # Input names
-    ["dsm","roof_training_area","building_footprints","roof_training_area_col"], 
-    # Input values - '&' character must be passed as '&amp;'
-    ["http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm_mini&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1",
-     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_training_areas_mini&amp;srsName=EPSG:28992",
-     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_building_footprints_mini&amp;srsName=EPSG:28992",
-     "type"],
-    # Output names
-    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"],
-    ["aspectMap","slopeMap","usefulRoofAreas"])
+#iniCli.init(
+#    # Process Server address
+#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#    # Process name
+#    "solar_cadastre_segment", 
+#    # Input names
+#    ["dsm","roof_training_area","building_footprints","roof_training_area_col"], 
+#    # Input values - '&' character must be passed as '&amp;'
+#    ["http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm_mini&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1",
+#     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_training_areas_mini&amp;srsName=EPSG:28992",
+#     "http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=RO_building_footprints_mini&amp;srsName=EPSG:28992",
+#     "type"],
+#    # Output names
+#    ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"],
+#    ["aspectMap","slopeMap","usefulRoofAreas"])
 
 ## Test with solar cadastre single process
 #iniCli.init(
@@ -87,6 +88,21 @@ iniCli.init(
 #    ["solar_irradiation"],
 #    #Output titles
 #    ["MySolarIrradiationMap"])
+
+# Test with noise process
+#iniCli.init(
+#    # Process Server address
+#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#    # Process name
+#    "noise", 
+#    # Input names
+#    ["input"], 
+#    # Input values - '&' character must be passed as '&amp;'
+#    ["http://services.iguess.tudor.lu/pywps/sampleData/lb_dem_10m_small.tiff"],
+#    # Output names
+#    ["noise"],
+#    #Output titles
+#    ["NoisyMap"])
 
 url = ""
 url = iniCli.sendRequest()
