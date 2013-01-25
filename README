@@ -1,6 +1,8 @@
                                 WPS CLIENT
                                 
-Copyright (c) 2011-2013, Public Research Center Henri Tudor
+Copyright 2010 - 2014 CRP Henri Tudor. All rights reserved. 
+Any use of this software constitutes full acceptance of all terms of the 
+software's license.
 
 This package provides tools to manage requests to a remote process server using
 the Web Processing Service standard [1]. The outputs of these requests are
