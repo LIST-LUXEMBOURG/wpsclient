@@ -10,13 +10,13 @@ import time
 iniCli = WPSClient.WPSClient()
 
 # Basic test with literal inputs
-iniCli.init(
-    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    "test_rand_map", 
-    ["delay"], 
-    ["1"],
-    ["rand", "region", "num"],
-    ["rand", "region", "num"])
+#iniCli.init(
+#    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#    "test_rand_map", 
+#    ["delay"], 
+#    ["1"],
+#    ["rand", "region", "num"],
+#    ["rand", "region", "num"])
 
 # Test with a remote GML resource
 #iniCli.init(
@@ -104,6 +104,15 @@ iniCli.init(
 #    #Output titles
 #    ["NoisyMap"])
 
+# Test asynchronous processing
+iniCli.init(
+    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    "test_status", 
+    ["delay"], 
+    ["500"],
+    ["num"],
+    ["num"])
+
 url = ""
 url = iniCli.sendRequest()
 
@@ -122,7 +131,9 @@ else:
 #                        ["MySolarIrradiationMap"])
 
     while not statCli.checkStatus():
-        print "Waiting..."
+        print "Process still running"
+        print str(statCli.percentCompleted) + "% completed"
+        print "Status message: " + str(statCli.statusMessage)
         time.sleep(10)
         
     if(statCli.status == statCli.ERROR):

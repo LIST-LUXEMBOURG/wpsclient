@@ -71,6 +71,9 @@ class WPSClient:
     
     .. attribute:: percentCompleted
         Percentage of process completion, as reported in the status XML file
+        
+    .. attribute:: statusMessage
+        Last status message returned during asynchronous execution
     
     .. attribute:: resultsComplex
         Vector of ComplexOutput objects harbouring the complex results produced
@@ -127,6 +130,7 @@ class WPSClient:
     statusURL = None
     processId = None
     percentCompleted = 0
+    statusMessage = None
     resultsComplex = []
     resultsLiteral = []
     map  = None
@@ -377,7 +381,10 @@ class WPSClient:
             self.status = self.RUNNING
             logging.debug("The process hasn't finished yet.")
             if ("percentCompleted" in self.xmlResponse):
-                self.percentCompleted = self.xmlResponse.split("percentCompleted=\"")[1].split("\"")[0]
+                temp = self.xmlResponse.split("percentCompleted=\"")[1]
+                rest = temp.split("\">")
+                self.percentCompleted = rest[0]
+                self.statusMessage = rest[1].split(Tags.prStart)[0]
                 logging.info(str(self.percentCompleted) + " % of the execution complete.")
             return False
         
