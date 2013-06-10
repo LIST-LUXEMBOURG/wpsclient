@@ -64,7 +64,7 @@ class MapFile:
     imageURL        = "/MapServ/map_images/"
     mapServerURL    = "http://localhost/cgi-bin/mapserv?map="
     mapFilesPath    = "/var/www/MapServ/"
-    otherProjs      = "EPSG:3035 EPSG:4326 EPSG:3785 EPSG:900913"
+    otherProjs      = "EPSG:3857 EPSG:3035 EPSG:4326 EPSG:900913"
     layers          = []
 
     def __init__(self, nameInit = "TestMapFile"):
@@ -122,10 +122,10 @@ class MapFile:
         text += "   \"init=epsg:" + self.epsgCode + "\"\n"
         text += "  END \n\n"
         
-        text += "  IMAGETYPE      GTiff \n\n"
+        #text += "  IMAGETYPE      GTiff \n\n"
 
         text += "  OUTPUTFORMAT \n"
-        text += "    NAME GTiff \n"
+        text += "    NAME GTiff-RGB \n"
         text += "    DRIVER \"GDAL/GTiff\" \n"
         text += "    MIMETYPE \"image/tiff\" \n"
         # This tag is generating exceptions in MapServer 6.2 - not clear why. 

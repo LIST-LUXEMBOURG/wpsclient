@@ -89,6 +89,26 @@ iniCli = WPSClient.WPSClient()
 #    #Output titles
 #    ["MySolarIrradiationMap"])
 
+# Test with solar PV potential
+iniCli.init(
+    # Process Server address
+    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
+    "solar_potential", 
+    # Input names
+    ["solar_irradiation", "potential_pv_area", "building_footprints", "econ_lifetime", "payback_price"], 
+    # Input values - '&' character must be passed as '&amp;'
+    ["http://wps.iguess.tudor.lu/pywps/sampleData/ro_solar_irradiation.tif",
+     "http://wps.iguess.tudor.lu/pywps/sampleData/ro_potential_pv_area.gml",
+     "http://wps.iguess.tudor.lu/pywps/sampleData/ro_ground_old.gml",
+     "20",
+     "0.249"
+     ],
+    # Output names
+    ["pv_potential"],
+    #Output titles
+    ["PV_potential"])
+
 # Test with noise process
 #iniCli.init(
 #    # Process Server address
@@ -105,13 +125,13 @@ iniCli = WPSClient.WPSClient()
 #    ["NoisyMap"])
 
 # Test asynchronous processing
-iniCli.init(
-    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    "test_status", 
-    ["delay"], 
-    ["500"],
-    ["num"],
-    ["num"])
+#iniCli.init(
+#    "http://10.1.15.11/cgi-bin/pywps.cgi?", 
+#    "test_status", 
+#    ["delay"], 
+#    ["500"],
+#    ["num"],
+#    ["num"])
 
 url = ""
 url = iniCli.sendRequest()
@@ -125,7 +145,7 @@ else:
     
     statCli = WPSClient.WPSClient()
     
-    statCli.initFromURL(url,["solar_irradiation"],["MySolarIrradiationMap"])
+    statCli.initFromURL(url,["pv_potential"],["PV_potential"])
 #    statCli.initFromURL('http://services.iguess.tudor.lu/wpsoutputs/pywps-7f8394a2-2ff3-11e2-8730-005056a512c1.xml',
 #                        ["solar_irradiation"],
 #                        ["MySolarIrradiationMap"])
