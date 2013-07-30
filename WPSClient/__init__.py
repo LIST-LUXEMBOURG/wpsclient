@@ -61,6 +61,9 @@ class WPSClient:
         Object of the type XMLPost containing the request coded as XML sent 
         to the WPS server as an HTTP Post 
     
+    .. attribute:: xmlResponse
+        String with the raw XML response to the WPS request. 
+            
     .. attribute:: statusURL
         URL of the remote XML file where the process updates its status and 
         writes its results after completion
@@ -127,6 +130,7 @@ class WPSClient:
     outputNames = None
     outputTitles = {}
     xmlPost = None
+    xmlResponse = None
     statusURL = None
     processId = None
     percentCompleted = 0

@@ -7,6 +7,12 @@ Created on Sep 26, 2012
 import WPSClient
 import time
 
+from owslib.wps import WebProcessingService
+
+wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True)
+
+wps.
+
 iniCli = WPSClient.WPSClient()
 
 # Basic test with literal inputs
