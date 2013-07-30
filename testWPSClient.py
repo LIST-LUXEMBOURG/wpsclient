@@ -7,12 +7,6 @@ Created on Sep 26, 2012
 import WPSClient
 import time
 
-from owslib.wps import WebProcessingService
-
-wps = WebProcessingService('http://cida.usgs.gov/climate/gdp/process/WebProcessingService', verbose=False, skip_caps=True)
-
-wps.
-
 iniCli = WPSClient.WPSClient()
 
 # Basic test with literal inputs
@@ -142,13 +136,13 @@ iniCli.init(
 url = ""
 url = iniCli.sendRequest()
 
-iniCli = None
-
 if(url == None):
     print "Sorry something went wrong with the request."
+    print "Last message logged:\n" + iniCli.lastLogMessage
 
 else:
     
+    iniCli = None
     statCli = WPSClient.WPSClient()
     
     statCli.initFromURL(url,["pv_potential"],["PV_potential"])
@@ -164,6 +158,7 @@ else:
         
     if(statCli.status == statCli.ERROR):
         print "There was an error. No mapfile was generated."
+        print "Last message logged:\n" + statCli.lastLogMessage
     
     else:
         # Needed because PyWPS deletes CRS information from the outputs
