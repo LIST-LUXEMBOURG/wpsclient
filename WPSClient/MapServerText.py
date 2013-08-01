@@ -248,20 +248,24 @@ class Layer:
         Path to the spatial data set in the disk
     """
     
-    name        = None
-    title       = None
+    name        = "TestLayer"
+    title       = "Test layer"
     abstract    = "A layer generated automatically"
     bBox        = None
     epsgCode    = None
     path        = None
     
-    def __init__(self, path, bounds, epsg, nameInit = "TestLayer", title = "Test layer"):
+    def __init__(self, path, bounds, epsg, nameInit = None, title = None, abstract = None):
         
-        self.name = nameInit
-        self.title = title
+        if nameInit != None:
+            self.name = nameInit
+        if title != None:
+            self.title = title
         self.bBox = bounds
         self.epsgCode = epsg 
         self.path = path
+        if abstract != None:
+            self.abstract = abstract
 
 ###############################################################################
 
@@ -293,9 +297,9 @@ class RasterLayer(Layer):
     maxCol = "255 255 96"
     minCol = "128 0 0"
     
-    def __init__(self, path, bounds, epsg, nameInit = "TestLayer", title = "Test layer"):
+    def __init__(self, path, bounds, epsg, nameInit = None, title = None, abstract = None):
         
-        Layer.__init__(self, path, bounds, epsg, nameInit, title) 
+        Layer.__init__(self, path, bounds, epsg, nameInit, title, abstract) 
         
     def setBounds(self, boundMax, boundMin):
         """
@@ -368,9 +372,9 @@ class VectorLayer(Layer):
     layerType   = None
     styles       = []
 
-    def __init__(self, path, bounds, epsg, nameInit = "TestLayer", title = "Test layer"):
+    def __init__(self, path, bounds, epsg, nameInit = None, title = None, abstract = None):
         
-        Layer.__init__(self, path, bounds, epsg, nameInit, title) 
+        Layer.__init__(self, path, bounds, epsg, nameInit, title, abstract) 
         # self.LayerHeader()
 
     def layerHeader(self):
@@ -391,12 +395,13 @@ class VectorLayer(Layer):
         text += "  METADATA \n"
         text += "    \"DESCRIPTION\" \"" + self.name + "\"\n"
         text += "    \"ows_title\"   \"" + self.title + "\"\n"
+        text += "    \"ows_abstract\" \"" + self.abstract + "\"\n\n"
         text += "    \"gml_include_items\" \"all\" \n"
         text += "    \"wms_include_items\" \"all\"\n"
         text += "  END  # Metadata \n\n"
 
         text += "    CLASS \n"
-        text += "      NAME       \"" + self.abstract + "\"\n"
+        text += "      NAME       \"" + self.title + "\"\n"
 
         return text
 
