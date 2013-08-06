@@ -288,17 +288,12 @@ class RasterLayer(Layer):
     .. attribute:: minVal
         Minimum value of this layer
             
-    .. attribute:: maxCol
-        RGB colour used to portrait the maximum value of this layer
-            
-    .. attribute:: minCol
-        RGB colour used to portrait the minimum value of this layer
+    .. attribute:: rainbowRamp
+        RGB colour ramp used to portrait the layer by default
     """
     
     maxVal = None
     minVal = None 
-    maxCol = "255 255 96"
-    minCol = "128 0 0"
     
     rainbowRamp = ["255   0   0", #Red
                    "255 127   0", #Orange
