@@ -153,7 +153,10 @@ class MapFile:
         text += "    \"ows_onlineresource\" \"" + self.mapServerURL + self.filePath() + "&\"\n"
         text += "    \"ows_srs\"             \"EPSG:" + self.epsgCode + " " + self.otherProjs + "\"\n"
         text += "    \"ows_bbox_extended\" \"true\"\n"
-        text += "    \"ows_enable_request\" \"*\"\n\n" 
+        text += "    \"ows_enable_request\" \"*\"\n" 
+        text += "    \"ows_encoding\" \"UTF-8\"\n"
+        text += "    \"gml_include_items\" \"all\"\n\n"
+
 
         text += "  END  # Metadata\n\n"
         text += "END  # Web\n\n"
@@ -297,6 +300,14 @@ class RasterLayer(Layer):
     maxCol = "255 255 96"
     minCol = "128 0 0"
     
+    rainbowRamp = ["255   0   0", #Red
+                   "255 127   0", #Orange
+                   "255 255   0", #Yellow
+                   "  0 255   0", #Green
+                   "  0   0 255", #Blue 
+                   " 75   0 130", #Indigo
+                   "143   0 255"] #Violet
+    
     def __init__(self, path, bounds, epsg, nameInit = None, title = None, abstract = None):
         
         Layer.__init__(self, path, bounds, epsg, nameInit, title, abstract) 
@@ -338,15 +349,23 @@ class RasterLayer(Layer):
         text += "    END \n\n"
         
         if ((self.minVal <> None) and (self.maxVal <> None)):
-            text += "    CLASS \n"
-            text += "        NAME \"ColourRamp\" \n"
-            text += "        EXPRESSION ([pixel] >= " + str(self.minVal) + " and [pixel] <= " + str(self.maxVal) + ") \n"
-            text += "        STYLE \n"
-            text += "            COLORRANGE " + self.minCol + " " + self.maxCol + "\n"
-            text += "            DATARANGE " + str(self.minVal) + " " + str(self.maxVal) + "\n"
-            text += "        END \n"
-            text += "    END \n\n"
-        
+            
+            interval = (self.maxVal - self.minVal) / 6
+            
+            for i in range(0, len(self.rainbowRamp) - 1):
+                
+                thisMin = self.minVal + interval * i
+                thisMax = thisMin + interval
+                
+                text += "    CLASS \n"
+                text += "        NAME \"RampClass" + str(i) + "\"\n"
+                text += "        EXPRESSION ([pixel] >= " + str(thisMin) + " and [pixel] <= " + str(thisMax) + ") \n"
+                text += "        STYLE \n"
+                text += "            COLORRANGE " + self.rainbowRamp[i] + " " + self.rainbowRamp[i + 1] + "\n"
+                text += "            DATARANGE " + str(thisMin) + " " + str(thisMax) + "\n"
+                text += "        END \n"
+                text += "    END \n\n"
+
         text += "  END \n"
         
         return text 

@@ -135,6 +135,22 @@ iniCli.init(
 #    ["num"],
 #    ["num"])
 
+# Complete Solar Irradiation module
+# iniCli.init(
+#     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
+#     "solar_irradiation", 
+#     ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
+#     ['http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;FORMAT=image/img&amp;CRS=EPSG:28992&amp;BBOX=91979.0,436326.0,92617.0,437659.5&amp;RESX=0.5&amp;RESY=0.5&amp;VERSION=1.0.0&amp;REQUEST=getCoverage&amp;COVERAGE=ro_dsm_mini',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_training_areas_mini',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_octa',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_ratio',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_clip_mini',
+#      'http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_linke',
+#      'type'],
+#     ['potential_pv_area','solar_irradiation'], 
+#     ['cb_roof','cb_solar'])
+
 url = ""
 url = iniCli.sendRequest()
 
@@ -159,7 +175,7 @@ else:
         time.sleep(10)
         
     if(statCli.status == statCli.ERROR):
-        print "There was an error. No mapfile was generated."
+        print "There was an error. No map file was generated."
         print "Last message logged:\n" + statCli.lastLogMessage
     
     else:
