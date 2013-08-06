@@ -332,6 +332,7 @@ class RasterLayer(Layer):
         text += "      \"wcs_label\"           \"" + self.name + "\"   ### required \n"
         text += "      \"wcs_rangeset_name\"   \"Range 1\"  ### required to support DescribeCoverage request \n"
         text += "      \"wcs_rangeset_label\"  \"My Label\" ### required to support DescribeCoverage request \n"
+        text += "      \"wcs_formats\" \"img\" ### required for IMG output format \n"
         #text += "      \"gml_include_items\" \"all\" \n"
         text += "      \"wms_include_items\" \"all\"\n"
         text += "    END \n\n"
