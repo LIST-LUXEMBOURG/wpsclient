@@ -141,7 +141,7 @@ class MapFile:
         text += "    IMAGEMODE FLOAT32 \n"
         text += "    EXTENSION \"img\" \n"
         text += "    FORMATOPTION \"COMPRESSED=YES\" \n"
-        text += "    FORMATOPTION \"FILENAME=WCSoutput.tif\" \n"
+        text += "    FORMATOPTION \"FILENAME=WCSoutput.img\" \n"
         text += "  END \n\n"
 
         text += "WEB \n"
