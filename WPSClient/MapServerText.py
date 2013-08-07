@@ -66,6 +66,22 @@ class MapFile:
     mapFilesPath    = "/var/www/MapServ/"
     otherProjs      = "EPSG:3857 EPSG:3035 EPSG:4326 EPSG:900913"
     layers          = []
+    
+#     meta_keywordlist
+#     meta_address
+#     meta_city
+#     meta_stateorprovince
+#     meta_postcode
+#     meta_country
+#     meta_contactelectronicmailaddress
+#     meta_contactperson
+#     meta_contactorganization
+#     meta_contactposition
+#     meta_role
+#     meta_contactvoicetelephone
+#     meta_contactfacsimiletelephone
+#     meta_contactinstructions
+#     meta_hoursofservice
 
     def __init__(self, nameInit = "TestMapFile"):
         

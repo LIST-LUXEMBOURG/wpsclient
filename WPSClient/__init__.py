@@ -226,7 +226,7 @@ class WPSClient:
         self.mapFilesPath = parser.get('MapServer', 'mapFilesPath')
         self.mapTemplate  = parser.get('MapServer', 'mapTemplate')
         self.imagePath    = parser.get('MapServer', 'imagePath')
-        self.imageURL     = parser.get('MapServer', 'imgeURL')
+        self.imageURL     = parser.get('MapServer', 'imageURL')
         self.otherProjs   = parser.get('MapServer', 'otherProjs')
         
         
@@ -481,6 +481,7 @@ class WPSClient:
                     logging.debug("The layer type: " + str(c.dataSet.getGeometryType()))
                     layer.addStyle(style)
                     self.map.addLayer(layer)
+                    logging.debug("Generated layer " + layer.name + " of type " + layer.layerType + ".")
                   
                 elif c.dataSet.dataType == "raster":
                     layer = UMN.RasterLayer(
@@ -491,10 +492,13 @@ class WPSClient:
                                             self.outputTitles[c.name])
                     layer.setBounds(c.dataSet.getMaxValue(), c.dataSet.getMinValue())
                     self.map.addLayer(layer)
+                    logging.debug("Generated layer " + layer.name + " of type raster.")
                     
                 else:
                     logging.warning(self.WARN_02 + c.name)
                     self.lastLogMessage = self.WARN_02
+                    
+                
 
         
         self.map.writeToDisk()
