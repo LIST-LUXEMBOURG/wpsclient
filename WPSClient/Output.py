@@ -27,10 +27,14 @@ class Output:
     
     .. value:: mapServerURL
         Value of the output
+        
+    .. attribute:: url
+        URL of the output, if passed by reference
     """
     
     name = None
     value = None
+    url = None
     
     def __init__(self, rawString):
         
@@ -46,20 +50,22 @@ class Output:
         to this output
         """
         
+        r = None
+        
         if not (Tags.preRef in rawString):
             logging.error("Output not created, tried to download a non reference output")
             return;
         
-        url = rawString.split("wps:Reference href=\"")[1].split("\"")[0]
+        self.url = rawString.split(Tags.midRef)[1].split("\"")[0]
         
         try:
-            r = urllib2.urlopen(urllib2.Request(urllib2.unquote(url)))
+            r = urllib2.urlopen(urllib2.Request(urllib2.unquote(self.url)))
             self.value = r.read()
         except Exception, err:
-            logging.error("Error retrieving %s:\n%s" %(url, err))
+            logging.error("Error retrieving %s:\n%s" %(self.url, err))
             return
         finally:
-            if r <> None:
+            if (r <> None):
                 r.close()
 
 ###########################################################
@@ -141,7 +147,12 @@ class ComplexOutput(Output):
         """
         
         file = None
-        self.path = os.path.join(dest, self.uniqueID + "_" + self.name + "." + self.extension)
+        
+        if (self.url != None):
+            s = self.url.split("/")
+            self.path = os.path.join(dest, s[len(s) - 1])
+        else:
+            self.path = os.path.join(dest, self.uniqueID + "_" + self.name + "." + self.extension)
         
         try:
             file = open(self.path, 'w')

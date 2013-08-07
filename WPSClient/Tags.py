@@ -11,6 +11,7 @@ Contains the WPS XML tags needed to parse the outputs of a WPS process.
 class Tags:
     
     preRef  = "<wps:Reference"
+    midRef  = "wps:Reference href=\""
     preId   = "<ows:Identifier>"
     sufId   = "</ows:Identifier>"
     preLit  = "<wps:LiteralData>"
