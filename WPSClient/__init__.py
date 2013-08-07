@@ -154,6 +154,25 @@ class WPSClient:
     imagePath    = None
     imageURL     = None
     otherProjs   = None
+    
+    meta_fees = "none"
+    meta_accessconstraints = "none"
+    meta_keywordlist = ""
+    meta_addresstype = ""
+    meta_address = ""
+    meta_city = ""
+    meta_stateorprovince = ""
+    meta_postcode = ""
+    meta_country = ""
+    meta_contactelectronicmailaddress = ""
+    meta_contactperson = ""
+    meta_contactorganization = ""
+    meta_contactposition = ""
+    meta_role = ""
+    meta_contactvoicetelephone = ""
+    meta_contactfacsimiletelephone = ""
+    meta_contactinstructions = ""
+    meta_hoursofservice = ""
 
     RUNNING = 1
     FINISHED = 2
@@ -229,6 +248,24 @@ class WPSClient:
         self.imageURL     = parser.get('MapServer', 'imageURL')
         self.otherProjs   = parser.get('MapServer', 'otherProjs')
         
+        self.meta_fees = parser.get('MapServer', 'meta_fees')
+        self.meta_accessconstraints = parser.get('MapServer', 'meta_accessconstraints')
+        self.meta_keywordlist = parser.get('MapServer', 'meta_keywordlist')
+        self.meta_addresstype = parser.get('MapServer', 'meta_addresstype')
+        self.meta_address = parser.get('MapServer', 'meta_address')
+        self.meta_city = parser.get('MapServer', 'meta_city')
+        self.meta_stateorprovince = parser.get('MapServer', 'meta_stateorprovince')
+        self.meta_postcode = parser.get('MapServer', 'meta_postcode')
+        self.meta_country = parser.get('MapServer', 'meta_country')
+        self.meta_contactelectronicmailaddress = parser.get('MapServer', 'meta_contactelectronicmailaddress')
+        self.meta_contactperson = parser.get('MapServer', 'meta_contactperson')
+        self.meta_contactorganization   = parser.get('MapServer', 'meta_contactorganization')
+        self.meta_contactposition = parser.get('MapServer', 'meta_contactposition')
+        self.meta_role = parser.get('MapServer', 'meta_role')
+        self.meta_contactvoicetelephone = parser.get('MapServer', 'meta_contactvoicetelephone')
+        self.meta_contactfacsimiletelephone = parser.get('MapServer', 'meta_contactfacsimiletelephone')
+        self.meta_contactinstructions = parser.get('MapServer', 'meta_contactinstructions')
+        self.meta_hoursofservice = parser.get('MapServer', 'meta_hoursofservice')
         
     def setupLogging(self):
         """
@@ -460,6 +497,25 @@ class WPSClient:
         self.map.mapServerURL = self.mapServerURL
         self.map.mapFilesPath = self.mapFilesPath
         self.map.otherProjs   = self.otherProjs
+        
+        self.map.meta_fees = self.meta_fees
+        self.map.meta_accessconstraints = self.meta_accessconstraints
+        self.map.meta_keywordlist = self.meta_keywordlist
+        self.map.meta_addresstype = self.meta_addresstype
+        self.map.meta_address = self.meta_address
+        self.map.meta_city = self.meta_city
+        self.map.meta_stateorprovince = self.meta_stateorprovince
+        self.map.meta_postcode = self.meta_postcode
+        self.map.meta_country = self.meta_country
+        self.map.meta_contactelectronicmailaddress = self.meta_contactelectronicmailaddress
+        self.map.meta_contactperson = self.meta_contactperson
+        self.map.meta_contactorganization = self.meta_contactorganization
+        self.map.meta_contactposition = self.meta_contactposition
+        self.map.meta_role = self.meta_role
+        self.map.meta_contactvoicetelephone = self.meta_contactvoicetelephone
+        self.map.meta_contactfacsimiletelephone = self.meta_contactfacsimiletelephone
+        self.map.meta_contactinstructions = self.meta_contactinstructions
+        self.map.meta_hoursofservice = self.meta_hoursofservice
         
         for c in self.resultsComplex:
             

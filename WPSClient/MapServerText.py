@@ -67,21 +67,24 @@ class MapFile:
     otherProjs      = "EPSG:3857 EPSG:3035 EPSG:4326 EPSG:900913"
     layers          = []
     
-#     meta_keywordlist
-#     meta_address
-#     meta_city
-#     meta_stateorprovince
-#     meta_postcode
-#     meta_country
-#     meta_contactelectronicmailaddress
-#     meta_contactperson
-#     meta_contactorganization
-#     meta_contactposition
-#     meta_role
-#     meta_contactvoicetelephone
-#     meta_contactfacsimiletelephone
-#     meta_contactinstructions
-#     meta_hoursofservice
+    meta_fees = "none"
+    meta_accessconstraints = "none"
+    meta_keywordlist = ""
+    meta_addresstype = ""
+    meta_address = ""
+    meta_city = ""
+    meta_stateorprovince = ""
+    meta_postcode = ""
+    meta_country = ""
+    meta_contactelectronicmailaddress = ""
+    meta_contactperson = ""
+    meta_contactorganization = ""
+    meta_contactposition = ""
+    meta_role = ""
+    meta_contactvoicetelephone = ""
+    meta_contactfacsimiletelephone = ""
+    meta_contactinstructions = ""
+    meta_hoursofservice = ""
 
     def __init__(self, nameInit = "TestMapFile"):
         
@@ -177,21 +180,22 @@ class MapFile:
 
         text += "    \"ows_fees\" \"none\"\n"
         text += "    \"ows_accessconstraints\" \"none\"\n"
-        text += "    \"ows_keywordlist\" \"Geospatial WebServices,iGUESS, MUSIC\"\n"
-        text += "    \"ows_address\" \"66, rue de Luxembourg\"\n"
-        text += "    \"ows_city\" \"Esch-sur-Alzette\"\n"
-        text += "    \"ows_stateorprovince\" \"\"\n"
-        text += "    \"ows_postcode\" \"4221\"\n"
-        text += "    \"ows_country\" \"Luxembourg\"\n"
-        text += "    \"ows_contactelectronicmailaddress\" \"christian.braun@tudor.lu\"\n"
-        text += "    \"ows_contactperson\" \"Christian Braun\"\n"
-        text += "    \"ows_contactorganization\" \"CRP Henri Tudor\"\n"
-        text += "    \"ows_contactposition\" \"R+D engineer\"\n"
-        text += "    \"ows_role\" \"GIS-Analyst\"\n"
-        text += "    \"ows_contactvoicetelephone\" \"00352 425991 6608\"\n"
-        text += "    \"ows_contactfacsimiletelephone\" \"00352 425991 555\"\n"
-        text += "    \"ows_contactinstructions\" \"by phone\" \n"
-        text += "    \"ows_hoursofservice\" \"24/7\"\n\n"
+        text += "    \"ows_keywordlist\" \"" + self.meta_keywordlist + "\"\n"
+        text += "    \"ows_addresstype\" \"" + self.meta_addresstype + "\"\n"
+        text += "    \"ows_address\" \"" + self.meta_address + "\"\n"
+        text += "    \"ows_city\" \"" + self.meta_city + "\"\n"
+        text += "    \"ows_stateorprovince\" \"" + self.meta_stateorprovince + "\"\n"
+        text += "    \"ows_postcode\" \"" + self.meta_postcode + "\"\n"
+        text += "    \"ows_country\" \"" + self.meta_country + "\"\n"
+        text += "    \"ows_contactelectronicmailaddress\" \"" + self.meta_contactelectronicmailaddress + "\"\n"
+        text += "    \"ows_contactperson\" \"" + self.meta_contactperson + "\"\n"
+        text += "    \"ows_contactorganization\" \"" + self.meta_contactorganization + "\"\n"
+        text += "    \"ows_contactposition\" \"" + self.meta_contactposition + "\"\n"
+        text += "    \"ows_role\" \"" + self.meta_role + "\"\n"
+        text += "    \"ows_contactvoicetelephone\" \"" + self.meta_contactvoicetelephone + "\"\n"
+        text += "    \"ows_contactfacsimiletelephone\" \"" + self.meta_contactfacsimiletelephone + "\"\n"
+        text += "    \"ows_contactinstructions\" \"" + self.meta_contactinstructions + "\" \n"
+        text += "    \"ows_hoursofservice\" \"" + self.meta_hoursofservice + "\"\n\n"
 
         text += "  END  # Metadata\n\n"
         text += "END  # Web\n\n"
