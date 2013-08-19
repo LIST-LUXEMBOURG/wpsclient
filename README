@@ -15,8 +15,8 @@ WPS CLIENT is part of the integrated Geospatial Urban Energy Information &
 Support System (iGUESS) [4] and a product of the MUSIC project [5], developed 
 by the Centre de Recherche Publique Henri Tudor in Luxembourg [6].
 
-This code is released under the EUPL v1.1 open source license [7], please read
-the LICENSE file for full details.
+This code is released under the EUPL v1.1 open source licence [7], please read
+the LICENCE file for full details.
 
 For exemples of usage please consult the testWPSClient.py file.
 
