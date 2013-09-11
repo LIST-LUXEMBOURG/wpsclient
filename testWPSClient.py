@@ -142,13 +142,13 @@ iniCli.init(
 #    ["NoisyMap"])
 
 # Test asynchronous processing
-#iniCli.init(
-#    "http://10.1.15.11/cgi-bin/pywps.cgi?", 
-#    "test_status", 
-#    ["delay"], 
-#    ["500"],
-#    ["num"],
-#    ["num"])
+# iniCli.init(
+#     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#     "test_status", 
+#     ["delay"], 
+#     ["500"],
+#     ["num"],
+#     ["num"])
 
 # Complete Solar Irradiation module
 # iniCli.init(
