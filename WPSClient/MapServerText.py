@@ -399,7 +399,7 @@ class RasterLayer(Layer):
         
         if ((self.minVal <> None) and (self.maxVal <> None)):
             
-            interval = (self.maxVal - self.minVal) / 6
+            interval = float(self.maxVal - self.minVal) / 6.0
             
             for i in range(0, len(self.rainbowRamp) - 1):
                 
@@ -408,7 +408,7 @@ class RasterLayer(Layer):
                 
                 text += "    CLASS \n"
                 text += "        NAME \"RampClass" + str(i) + "\"\n"
-                text += "        EXPRESSION ([pixel] >= " + str(thisMin) + " and [pixel] <= " + str(thisMax) + ") \n"
+                text += "        EXPRESSION ([pixel] >= " + str(thisMin) + " and [pixel] < " + str(thisMax) + ") \n"
                 text += "        STYLE \n"
                 text += "            COLORRANGE " + self.rainbowRamp[i] + " " + self.rainbowRamp[i + 1] + "\n"
                 text += "            DATARANGE " + str(thisMin) + " " + str(thisMax) + "\n"
