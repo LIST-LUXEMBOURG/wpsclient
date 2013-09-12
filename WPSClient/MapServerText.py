@@ -532,7 +532,7 @@ class MapStyle:
     penWidth = None
     colour = None
 
-    def __init__(self, pen = "2", col = "160 0 0"):
+    def __init__(self, pen = "1.5", col = "160 0 0"):
 
         self.penWidth = pen
         self.colour = col
@@ -562,6 +562,11 @@ class MapStyle:
 
         text  = "      STYLE \n"
         text += "        COLOR        " + self.colour + "\n"
+        text += "        OPACITY      30 \n"
+        text += "        ANTIALIAS    TRUE \n"
+        text += "      END \n"
+        text += "      STYLE \n"
+        text += "        OUTLINECOLOR " + self.colour + "\n"
         text += "        WIDTH        " + self.penWidth + "\n"
         text += "        ANTIALIAS    TRUE \n"
         text += "      END \n"
