@@ -407,7 +407,7 @@ class RasterLayer(Layer):
                 
                 text += "    CLASS \n"
                 text += "        NAME \"RampClass" + str(i) + "\"\n"
-                text += "        EXPRESSION ([pixel] >= " + str(thisMin) + " and [pixel] < " + str(thisMax) + ") \n"
+                text += "        EXPRESSION ([pixel] >= " + str(thisMin) + " and [pixel] <= " + str(thisMax) + ") \n"
                 text += "        STYLE \n"
                 text += "            COLORRANGE " + self.rainbowRamp[i] + " " + self.rainbowRamp[i + 1] + "\n"
                 text += "            DATARANGE " + str(thisMin) + " " + str(thisMax) + "\n"
