@@ -18,7 +18,7 @@ by the Centre de Recherche Publique Henri Tudor in Luxembourg [6].
 This code is released under the EUPL v1.1 open source licence [7], please read
 the LICENCE file for full details.
 
-For exemples of usage please consult the testWPSClient.py file.
+For examples of usage please consult the testWPSClient.py file.
 
 [1] http://www.opengeospatial.org/standards/wps
 [2] http://www.mapserver.org
