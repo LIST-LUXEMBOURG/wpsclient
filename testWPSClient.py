@@ -42,19 +42,19 @@ iniCli = WPSClient.WPSClient()
 #    ["buffer"])
 
 # Test with a WFS resource
-# iniCli.init(
-#     # Process Server address
-#     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-#     # Process name
-#     "buffer", 
-#     # Input names
-#     ["size","data"], 
-#     # Input values - '&' character must be passed as '&amp;'
-#     ["5","http://services.iguess.tudor.lu/cgi-bin/mapserv?map=/var/www/MapFiles/Europe4326.map&amp;SERVICE=WFS&amp;VERSION=1.1.0&amp;REQUEST=getfeature&amp;TYPENAME=testLines4326&amp;srsName=EPSG:900913&amp;MAXFEATURES=10"],
-#     # Output names
-#     ["buffer"],
-#     #Output titles
-#     ["BufferedRegions"])
+iniCli.init(
+    # Process Server address
+    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
+    "buffer", 
+    # Input names
+    ["size","data"], 
+    # Input values - '&' character must be passed as '&amp;'
+    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
+    # Output names
+    ["buffer"],
+    #Output titles
+    ["BufferedRegions"])
 
 # Test with ultimate question
 #iniCli.init(
@@ -167,20 +167,20 @@ iniCli = WPSClient.WPSClient()
 #     ['cb_roof','cb_solar'])
 
 # Complete Solar Irradiation module
-iniCli.init(
-    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
-    "solar_irradiation", 
-    ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
-    ['http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;FORMAT=image/img&amp;CRS=EPSG:28992&amp;BBOX=92221,436692,92306,436769&amp;RESX=0.5&amp;RESY=0.5&amp;VERSION=1.0.0&amp;REQUEST=getCoverage&amp;COVERAGE=ro_dsm',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_training_areas_mini',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_octa',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_ratio',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_clip_mini',
-     'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_linke',
-     'type'],
-    ['potential_pv_area','solar_irradiation'], 
-    ['cb_roof','cb_solar'])
+# iniCli.init(
+#     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
+#     "solar_irradiation", 
+#     ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
+#     ['http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;FORMAT=image/img&amp;CRS=EPSG:28992&amp;BBOX=92221,436692,92306,436769&amp;RESX=0.5&amp;RESY=0.5&amp;VERSION=1.0.0&amp;REQUEST=getCoverage&amp;COVERAGE=ro_dsm',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_training_areas_mini',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_octa',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_ratio',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_clip_mini',
+#      'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_linke',
+#      'type'],
+#     ['potential_pv_area','solar_irradiation'], 
+#     ['cb_roof','cb_solar'])
 
 url = ""
 url = iniCli.sendRequest()
@@ -212,10 +212,15 @@ else:
     else:
         # Needed because PyWPS deletes CRS information from the outputs
         # Maybe it should be a parameter to the constructor?
-        statCli.epsg = "28992"
+        #statCli.epsg = "28992"
+        statCli.epsg = None
         
         path = statCli.generateMapFile()
-        print "Wrote map file to disk:\n" + path
+        if(path != None):
+            print "Wrote map file to disk:\n" + path
+        else:
+            print "Something went wrong, please check the log file."
+            print statCli.lastLogMessage
     
     
     

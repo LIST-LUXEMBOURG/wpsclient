@@ -145,13 +145,13 @@ class MapFile:
         self.calculateBBoxFromLayers()
         
         if self.epsgCode == None:
-            raise Exception(ERR_01)
+            raise Exception(self.ERR_01)
         
         if self.shapePath == None:
-            raise Exception(ERR_02)
+            raise Exception(self.ERR_02)
         
         if self.mapServerURL == None:
-            raise Exception(ERR_03)
+            raise Exception(self.ERR_03)
         
         if self.otherProjs == None:
             self.otherProjs = ""
