@@ -21,6 +21,7 @@ Created on Sep 26, 2012
 
 import WPSClient
 import time
+import sys
 
 iniCli = WPSClient.WPSClient()
 
@@ -183,11 +184,16 @@ iniCli.init(
 #     ['cb_roof','cb_solar'])
 
 url = ""
-url = iniCli.sendRequest()
+
+try :
+    url = iniCli.sendRequest()
+except Exception, e:
+    from locale import str
+    print "Could send the request:\n" + str(e)
+    sys.exit()
 
 if(url == None):
-    print "Sorry something went wrong with the request."
-    print "Last message logged:\n" + iniCli.lastLogMessage
+    print "Sorry something went wrong with the request. Please check the log file"
 
 else:
     
@@ -199,29 +205,37 @@ else:
 #                        ["solar_irradiation"],
 #                        ["MySolarIrradiationMap"])
 
-    while not statCli.checkStatus():
+
+    status = False
+    while not status:
+        try :
+            status = statCli.checkStatus()
+        except Exception, e:
+            print "Something went wrong, please check the log file."
+            print str(e)
+            sys.exit()    
         print "Process still running"
         print str(statCli.percentCompleted) + "% completed"
         print "Status message: " + str(statCli.statusMessage)
         time.sleep(10)
         
     if(statCli.status == statCli.ERROR):
-        print "There was an error. No map file was generated."
-        print "Last message logged:\n" + statCli.lastLogMessage
+        print "There was an error, no map file was generated. Please check the log file."
     
     else:
         # Needed because PyWPS deletes CRS information from the outputs
         # Maybe it should be a parameter to the constructor?
-        #statCli.epsg = "28992"
-        statCli.epsg = None
+        statCli.epsg = "28992"
+        path = None
         
-        path = statCli.generateMapFile()
-        if(path != None):
-            print "Wrote map file to disk:\n" + path
-        else:
+        try :
+            path = statCli.generateMapFile()
+        except Exception, e:
             print "Something went wrong, please check the log file."
-            print statCli.lastLogMessage
-    
+            print str(e)
+            sys.exit()
+        
+        print "Wrote map file to disk:\n" + path
     
     
     
