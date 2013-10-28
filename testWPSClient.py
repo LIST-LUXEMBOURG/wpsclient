@@ -43,19 +43,19 @@ iniCli = WPSClient.WPSClient()
 #    ["buffer"])
 
 # Test with a WFS resource
-iniCli.init(
-    # Process Server address
-    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-    # Process name
-    "buffer", 
-    # Input names
-    ["size","data"], 
-    # Input values - '&' character must be passed as '&amp;'
-    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
-    # Output names
-    ["buffer"],
-    #Output titles
-    ["BufferedRegions"])
+# iniCli.init(
+#     # Process Server address
+#     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+#     # Process name
+#     "buffer", 
+#     # Input names
+#     ["size","data"], 
+#     # Input values - '&' character must be passed as '&amp;'
+#     ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
+#     # Output names
+#     ["buffer"],
+#     #Output titles
+#     ["BufferedRegions"])
 
 # Test with ultimate question
 #iniCli.init(
@@ -182,6 +182,24 @@ iniCli.init(
 #      'type'],
 #     ['potential_pv_area','solar_irradiation'], 
 #     ['cb_roof','cb_solar'])
+
+
+# Test raster output
+iniCli.init(
+    # Process Server address
+    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+    # Process name
+    "slope_aspect", 
+    # Input names
+    ["dem"], 
+    # Input values - '&' character must be passed as '&amp;'
+    ["http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;FORMAT=image/img&amp;CRS=EPSG:28992&amp;BBOX=92221,436692,92306,436769&amp;RESX=0.5&amp;RESY=0.5&amp;VERSION=1.0.0&amp;REQUEST=getCoverage&amp;COVERAGE=ro_dsm"],
+    # Output names
+    ["slope", "aspect"],
+    #Output titles
+    ["slope_result", "aspect_result"])
+
+
 
 url = ""
 
