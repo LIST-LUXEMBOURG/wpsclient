@@ -423,7 +423,7 @@ class RasterLayer(Layer):
     
     def getStyleContinuous(self, thisMin, thisMax, i):
         """
-        :returns: a string with a colour ramp class for a raster style
+        :returns: a string with a colour ramp segment for a raster style
         """
         
         text  = "    CLASS \n"
