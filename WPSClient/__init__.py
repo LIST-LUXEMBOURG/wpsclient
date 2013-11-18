@@ -219,6 +219,8 @@ class WPSClient:
         :param outputNames: list of strings with output names       
         """
         
+        # Loading this stuff here probably doesn't make sense
+        # Check at a later data if __init__ is run from an external model (tha includes this one)
         self.loadConfigs()
         self.setupLogging()
         
@@ -239,6 +241,8 @@ class WPSClient:
         :param url: string with the status URL address of a remote process      
         """
         
+        # Loading this stuff here probably doesn't make sense
+        # Check at a later data if __init__ is run from an external model (tha includes this one)
         self.loadConfigs()
         self.setupLogging()
         
