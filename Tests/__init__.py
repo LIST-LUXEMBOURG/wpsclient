@@ -22,6 +22,7 @@ Created on Nov 21, 2013
 __all__ = ["TestAsynch",
            "TestBufferGML",
            "TestBufferWFS",
+           "TestLogging",
            "TestNoise",
            "TestPVPotential",
            "TestRand",

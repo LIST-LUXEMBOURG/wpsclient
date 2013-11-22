@@ -22,6 +22,7 @@ Created on Nov 22, 2013
 from Tests import *
 
 #t = TestBufferWFS.TestBufferWFS()
-t = TestPVPotential.TestPVPotential()
+#t = TestPVPotential.TestPVPotential()
+t = TestLogging.TestLogging()
 
 t.run()
