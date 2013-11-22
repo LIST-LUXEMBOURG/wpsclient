@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestSolarIrradiation(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ['potential_pv_area','solar_irradiation']
-        outputTitles = ['cb_roof','cb_solar']
+        Test.__init__(self)
+        
+        self.outputNames = ['potential_pv_area','solar_irradiation']
+        self.outputTitles = ['cb_roof','cb_solar']
         
         # Complete Solar Irradiation module
-        iniCli.init(
+        self.iniCli.init(
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
             "solar_irradiation", 
             ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
@@ -40,7 +44,7 @@ class TestSolarIrradiation(Test):
              'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_clip_mini',
              'http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_linke',
              'type'],
-            outputNames, 
-            outputTitles)
+            self.outputNames, 
+            self.outputTitles)
 
         

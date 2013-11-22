@@ -28,5 +28,4 @@ __all__ = ["TestAsynch",
            "TestSolarCadastre",
            "TestSolarIrradiation",
            "TestSolarSegmentation",
-           "TestUltimateQuestion"
-           ]
+           "TestUltimateQuestion"]

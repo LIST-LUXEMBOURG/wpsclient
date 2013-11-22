@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,22 +19,25 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestBufferGML(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["buffer"]
-        outputTitles = ["buffer"]
+        Test.__init__(self)
+        
+        self.outputNames = ["buffer"]
+        self.outputTitles = ["buffer"]
         
         # Test with a remote GML resource
-        iniCli.init(
+        self.iniCli.init(
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             "buffer", 
             ["size","data"], 
             ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
-            outputNames,
-            outputTitles)
+            self.outputNames,
+            self.outputTitles)
 
         

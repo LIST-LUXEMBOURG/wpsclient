@@ -19,23 +19,28 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+import sys
+import time
 import WPSClient
 
 class Test:
     
-    iniCli = WPSClient.WPSClient()
+    iniCli = None
     outputNames = None 
     outputTitles = None
+    
+    def __init__(self):
+        
+        self.iniCli = WPSClient.WPSClient()
     
     def run(self):
         
         url = ""
 
         try :
-            url = iniCli.sendRequest()
+            url = self.iniCli.sendRequest()
         except Exception, e:
-            from locale import str
-            print "Could send the request:\n" + str(e)
+            print "Could not send the request: %s" % e
             sys.exit()
         
         if(url == None):
@@ -44,10 +49,10 @@ class Test:
         
         else:
             
-            iniCli = None
+            self.iniCli = None
             statCli = WPSClient.WPSClient()
             
-            statCli.initFromURL(url, outputNames, outputTitles)
+            statCli.initFromURL(url, self.outputNames, self.outputTitles)
         
             status = False
             while not status:

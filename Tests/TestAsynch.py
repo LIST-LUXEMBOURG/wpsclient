@@ -19,22 +19,25 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestAsynch(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
+        
+        Test.__init__(self)
     
-        outputNames = ["num"]
-        outputTitles = ["num"]
+        self.outputNames = ["num"]
+        self.outputTitles = ["num"]
         
 		# Test asynchronous processing
-        iniCli.init(
+        self.iniCli.init(
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-		    "test_status", 
+		    "test_status", x
 		    ["delay"], 
 		    ["500"],
-		    outputNames,
-		    outputTitles)
+		    self.outputNames,
+		    self.outputTitles)
 
         

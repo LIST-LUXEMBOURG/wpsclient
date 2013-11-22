@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,16 +19,19 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestPVPotential(Test):
 
-	def __init__(self, names, titles):
+	def __init__(self):
 	
-		outputNames = ["slope", "aspect"]
-		outputTitles = ["slope_result", "aspect_result"]
+		Test.__init__(self)
+        
+		self.outputNames = ["slope", "aspect"]
+		self.outputTitles = ["slope_result", "aspect_result"]
 		
-		iniCli.init(
+		self.iniCli.init(
 		    # Process Server address
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 		    # Process name
@@ -37,7 +41,7 @@ class TestPVPotential(Test):
 		    # Input values - '&' character must be passed as '&amp;'
 		    ["http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;FORMAT=image/img&amp;CRS=EPSG:28992&amp;BBOX=92221,436692,92306,436769&amp;RESX=0.5&amp;RESY=0.5&amp;VERSION=1.0.0&amp;REQUEST=getCoverage&amp;COVERAGE=ro_dsm"],
 		    # Output names
-		    outputNames,
+		    self.outputNames,
 		    #Output titles
-		    outputTitles)
+		    self.outputTitles)
 		

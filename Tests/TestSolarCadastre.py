@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestSolarCadastre(Test):
 
     def __init__(self, names, titles):
     
-        outputNames = ["solar_irradiation"]
-        outputTitles = ["MySolarIrradiationMap"]
+        Test.__init__(self)
+        
+        self.outputNames = ["solar_irradiation"]
+        self.outputTitles = ["MySolarIrradiationMap"]
         
         ## Test with solar cadastre single process
-        iniCli.init(
+        self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
@@ -43,8 +47,8 @@ class TestSolarCadastre(Test):
              "7"
              ],
             # Output names
-            outputNames,
+            self.outputNames,
             #Output titles
-            outputTitles)
+            self.outputTitles)
 
         

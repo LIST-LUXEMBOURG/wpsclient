@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestNoise(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["noise"]
-        outputTitles = ["NoisyMap"]
+        Test.__init__(self)
+        
+        self.outputNames = ["noise"]
+        self.outputTitles = ["NoisyMap"]
         
         # Test with noise process
-        iniCli.init(
+        self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
@@ -38,8 +42,8 @@ class TestNoise(Test):
             # Input values - '&' character must be passed as '&amp;'
             ["http://maps.iguess.tudor.lu/pywps/sampleData/lb_dem_10m_small.tiff"],
             # Output names
-            outputNames,
+            self.outputNames,
             #Output titles
-            outputTitles)
+            self.outputTitles)
 
         

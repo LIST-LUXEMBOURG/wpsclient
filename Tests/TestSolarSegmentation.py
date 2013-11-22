@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestSolarSegmentation(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"]
-        outputTitles = ["buffer"]
+        Test.__init__(self)
+        
+        self.outputNames = ["optimum_aspect", "optimum_slope", "ro_roof_useful_intsect_gml"]
+        self.outputTitles = ["buffer"]
         
         # Test with solar cadastre segmentation
-        iniCli.init(
+        self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name

@@ -26,7 +26,7 @@ import sys
 iniCli = WPSClient.WPSClient()
 
 # Basic test with literal inputs
-# iniCli.init(
+# self.iniCli.init(
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     "test_rand_map", 
 #     ["delay"], 
@@ -35,7 +35,7 @@ iniCli = WPSClient.WPSClient()
 #     ["rand", "region", "num"])
 
 # Test with a remote GML resource
-#iniCli.init(
+#self.iniCli.init(
 #    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #    "buffer", 
 #    ["size","data"], 
@@ -43,7 +43,7 @@ iniCli = WPSClient.WPSClient()
 #    ["buffer"])
 
 # Test with a WFS resource
-# iniCli.init(
+# self.iniCli.init(
 #     # Process Server address
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     # Process name
@@ -58,7 +58,7 @@ iniCli = WPSClient.WPSClient()
 #     ["BufferedRegions"])
 
 # Test with ultimate question
-#iniCli.init(
+#self.iniCli.init(
 #    # Process Server address
 #    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #    # Process name
@@ -71,7 +71,7 @@ iniCli = WPSClient.WPSClient()
 #    ["answer"])
 
 # Test with solar cadastre segmentation
-# iniCli.init(
+# self.iniCli.init(
 #     # Process Server address
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     # Process name
@@ -88,7 +88,7 @@ iniCli = WPSClient.WPSClient()
 #     ["aspectMap","slopeMap","usefulRoofAreas"])
 
 ## Test with solar cadastre single process
-# iniCli.init(
+# self.iniCli.init(
 #     # Process Server address
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     # Process name
@@ -108,7 +108,7 @@ iniCli = WPSClient.WPSClient()
 #     ["MySolarIrradiationMap"])
 
 # Test with solar PV potential
-# iniCli.init(
+# self.iniCli.init(
 #     # Process Server address
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     # Process name
@@ -128,7 +128,7 @@ iniCli = WPSClient.WPSClient()
 #     ["PV_potential"])
 
 # Test with noise process
-#iniCli.init(
+#self.iniCli.init(
 #    # Process Server address
 #    "http://services.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #    # Process name
@@ -143,7 +143,7 @@ iniCli = WPSClient.WPSClient()
 #    ["NoisyMap"])
 
 # Test asynchronous processing
-# iniCli.init(
+# self.iniCli.init(
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 #     "test_status", 
 #     ["delay"], 
@@ -152,7 +152,7 @@ iniCli = WPSClient.WPSClient()
 #     ["num"])
 
 # Complete Solar Irradiation module
-# iniCli.init(
+# self.iniCli.init(
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
 #     "solar_irradiation", 
 #     ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
@@ -168,7 +168,7 @@ iniCli = WPSClient.WPSClient()
 #     ['cb_roof','cb_solar'])
 
 # Complete Solar Irradiation module
-# iniCli.init(
+# self.iniCli.init(
 #     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?",
 #     "solar_irradiation", 
 #     ['dsm','roof_training_area','octa','building_footprints','ratio','region','linke','roof_training_area_col'],
@@ -185,7 +185,7 @@ iniCli = WPSClient.WPSClient()
 
 
 # Test raster output
-iniCli.init(
+self.iniCli.init(
     # Process Server address
     "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
     # Process name

@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestUltimateQuestion(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["answer"]
-        outputTitles = ["answer"]
+        Test.__init__(self)
+        
+        self.outputNames = ["answer"]
+        self.outputTitles = ["answer"]
         
         # Test with a WFS resource
-        iniCli.init(
+        self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
@@ -38,7 +42,7 @@ class TestUltimateQuestion(Test):
             # Input values - '&' character must be passed as '&amp;'
             [],
             # Output names
-            outputNames,
+            self.outputNames,
             #Output titles
-            outputTitles)
+            self.outputTitles)
         

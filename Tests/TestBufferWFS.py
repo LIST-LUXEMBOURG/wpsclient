@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,17 +19,20 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestBufferWFS(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["buffer"]
-        outputTitles = ["BufferedRegions"]
+        Test.__init__(self)
+        
+        self.outputNames = ["buffer"]
+        self.outputTitles = ["BufferedRegions"]
         
         # Test with a WFS resource
-		iniCli.init(
+        self.iniCli.init(
 		    # Process Server address
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 		    # Process name
@@ -38,6 +42,6 @@ class TestBufferWFS(Test):
 		    # Input values - '&' character must be passed as '&amp;'
 		    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
 		    # Output names
-		    outputNames,
+		    self.outputNames,
 		    #Output titles
-		    outputTitles)
+		    self.outputTitles)

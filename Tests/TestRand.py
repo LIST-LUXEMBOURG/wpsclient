@@ -1,3 +1,4 @@
+# coding: utf-8
 '''
 Copyright 2010 - 2014 CRP Henri Tudor
 
@@ -18,22 +19,25 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
+from Test import Test
 import WPSClient
 
 class TestRand(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
-        outputNames = ["rand", "region", "num"]
-        outputTitles = ["rand", "region", "num"]
+        Test.__init__(self)
+        
+        self.outputNames = ["rand", "region", "num"]
+        self.outputTitles = ["rand", "region", "num"]
         
         # Basic test with literal inputs
-        iniCli.init(
+        self.iniCli.init(
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             "test_rand_map", 
             ["delay"], 
             ["1"],
-            outputNames,
-            outputTitles)
+            self.outputNames,
+            self.outputTitles)
 
         
