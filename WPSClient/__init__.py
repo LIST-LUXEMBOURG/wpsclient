@@ -337,7 +337,7 @@ class WPSClient:
             self.logger.addHandler(ch_stream)
             
         else:
-            ch_file = logging.FileHandler(self.logFile, 'w')
+            ch_file = logging.FileHandler(self.logFile, 'a')
             #ch_file.setLevel(self.logLevel)
             ch_file.setFormatter(formatter)
             self.logger.addHandler(ch_file)            
