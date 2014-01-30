@@ -24,7 +24,7 @@ import WPSClient
 
 class TestSolarCadastre(Test):
 
-    def __init__(self, names, titles):
+    def __init__(self):
     
         Test.__init__(self)
         

@@ -28,7 +28,7 @@ class TestBufferWFS(Test):
     
         Test.__init__(self)
         
-        self.outputNames = ["buffer"]
+        self.outputNames = ["buffered_vector"]
         self.outputTitles = ["BufferedRegions"]
         
         # Test with a WFS resource
@@ -38,7 +38,7 @@ class TestBufferWFS(Test):
 		    # Process name
 		    "buffer", 
 		    # Input names
-		    ["size","data"], 
+		    ["buffer_width","vector"], 
 		    # Input values - '&' character must be passed as '&amp;'
 		    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
 		    # Output names

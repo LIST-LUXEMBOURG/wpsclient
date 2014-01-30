@@ -14,7 +14,7 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Nov 21, 2013
+Created on Jan 17, 2014
 
 @author: desousa
 '''
@@ -22,22 +22,28 @@ Created on Nov 21, 2013
 from Test import Test
 import WPSClient
 
-class TestAsynch(Test):
+class TestDijkstra(Test):
 
     def __init__(self):
-        
-        Test.__init__(self)
     
-        self.outputNames = ["num"]
-        self.outputTitles = ["num"]
+        Test.__init__(self)
         
-		# Test asynchronous processing
+        self.outputNames = ["path"]
+        self.outputTitles = ["ShortestPath"]
+        
+        # Test with a WFS resource
         self.iniCli.init(
+		    # Process Server address
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-		    "test_status", 
-		    ["delay"], 
-		    ["500"],
+		    # Process name
+		    "dijkstra", 
+		    # Input names
+		    ["network", "start", "target"], 
+		    # Input values - '&' character must be passed as '&amp;'
+		    ["Lux", "30", "60"],
+		    # Output names
 		    self.outputNames,
+		    #Output titles
 		    self.outputTitles)
-
+        
         

@@ -28,14 +28,14 @@ class TestBufferGML(Test):
     
         Test.__init__(self)
         
-        self.outputNames = ["buffer"]
-        self.outputTitles = ["buffer"]
+        self.outputNames = ["buffered_vector"]
+        self.outputTitles = ["buffered_vector"]
         
         # Test with a remote GML resource
         self.iniCli.init(
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             "buffer", 
-            ["size","data"], 
+            ["buffer_width","vector"], 
             ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
             self.outputNames,
             self.outputTitles)

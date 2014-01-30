@@ -21,8 +21,13 @@ Created on Nov 22, 2013
 
 from Tests import *
 
+#t = TestBufferGML.TestBufferGML()
 #t = TestBufferWFS.TestBufferWFS()
+#t = TestDijkstra.TestDijkstra()
 #t = TestPVPotential.TestPVPotential()
-t = TestLogging.TestLogging()
+#t = TestLogging.TestLogging()
+#t = TestNoise.TestNoise()
+#t = TestSlopeAspect.TestSlopeAspect()
+t = TestRand.TestRand()
 
 t.run()
