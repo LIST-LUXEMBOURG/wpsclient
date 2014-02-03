@@ -388,7 +388,7 @@ class RasterLayer(Layer):
         :returns: a string with the MapServer layer definition for a map file
         """
         
-        text =  "  LAYER \n"
+        text =  "  LAYER # " + self.name + " " + str(self.layerType) + " ------------------------\n\n"
         text += "    NAME \"" + self.name + "\"\n"
         text += "    TYPE RASTER  \n"
         text += "    STATUS OFF \n"
@@ -417,7 +417,7 @@ class RasterLayer(Layer):
                 thisMax = thisMin + interval
                 text += self.getStyleIntervals(thisMin, thisMax, i)
         
-        text += "  END \n"
+        text += "  END #" + self.name + " " + str(self.layerType) + " ------------------------\n\n"
         
         return text
     
