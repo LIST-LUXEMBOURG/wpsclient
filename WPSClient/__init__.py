@@ -31,22 +31,13 @@ This package is released under the GPL-3.0 open source license [4].
 [3] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
 [4] http://opensource.org/licenses/GPL-3.0
 '''
-__all__ = ["Tags","Output","DataSet","MapServerText"]
+__all__ = ["DataSet","MapServerText"]
 
-import os
-import urllib2
-import httplib
 import logging
 from ConfigParser import SafeConfigParser
 from owslib.wps import WebProcessingService, WPSExecution
-from Tags import Tags
 from DataSet import DataSet
-from Output import ComplexOutput
-from Output import LiteralOutput
-from XMLPost import XMLPost
 import MapServerText as UMN
-import re  # For regular expression matching
-from argparse import PARSER
 
 ##########################################################
 
