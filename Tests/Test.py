@@ -26,8 +26,7 @@ import WPSClient
 class Test:
     
     iniCli = None
-    outputNames = None 
-    outputTitles = None
+    outputs = None
     
     def __init__(self):
         
@@ -52,7 +51,7 @@ class Test:
             self.iniCli = None
             statCli = WPSClient.WPSClient()
             
-            statCli.initFromURL(url, self.outputNames, self.outputTitles)
+            statCli.initFromURL(url, self.outputs)
         
             status = False
             while not status:
@@ -83,4 +82,7 @@ class Test:
                     print str(e)
                     sys.exit()
                 
-                print "Wrote map file to disk:\n" + path
+                if (path is not None): 
+                    print "Wrote map file to disk:\n" + path
+                else:
+                    print "No map file was written. Were complex outputs present?"

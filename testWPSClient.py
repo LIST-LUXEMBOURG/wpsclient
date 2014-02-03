@@ -21,6 +21,7 @@ Created on Nov 22, 2013
 
 from Tests import *
 
+#t = TestAsynch.TestAsynch()
 #t = TestBufferGML.TestBufferGML()
 #t = TestBufferWFS.TestBufferWFS()
 #t = TestDijkstra.TestDijkstra()

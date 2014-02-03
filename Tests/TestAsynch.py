@@ -28,16 +28,13 @@ class TestAsynch(Test):
         
         Test.__init__(self)
     
-        self.outputNames = ["num"]
-        self.outputTitles = ["num"]
+        self.outputs = [("num","True")]
         
 		# Test asynchronous processing
         self.iniCli.init(
-		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+		    "http://localhost/cgi-bin/pywps.cgi?", 
 		    "test_status", 
-		    ["delay"], 
-		    ["500"],
-		    self.outputNames,
-		    self.outputTitles)
+		    [("delay", "50")], 
+		    self.outputs)
 
         

@@ -38,7 +38,9 @@ import urllib2
 import httplib
 import logging
 from ConfigParser import SafeConfigParser
+from owslib.wps import WebProcessingService, WPSExecution
 from Tags import Tags
+from DataSet import DataSet
 from Output import ComplexOutput
 from Output import LiteralOutput
 from XMLPost import XMLPost
@@ -65,25 +67,18 @@ class WPSClient:
     .. attribute:: processName
         Name of the process to invoke
     
-    .. attribute:: inputNames
-        List with the names of input arguments of the process
-    
-    .. attribute:: inputValues
-        List with the values to pass as arguments to the process
+    .. attribute:: inputs
+        Array of pair lists composed by the input name and the respective value
     
     .. attribute:: outputNames
-        List with the names of the process outputs. Needed to build the XML
-        request
-           
-    .. attribute:: outputTitles
-        List with the titles of outputs to use in the Map file.
-    
-    .. attribute:: xmlPost
-        Object of the type XMLPost containing the request coded as XML sent 
-        to the WPS server as an HTTP Post 
-    
-    .. attribute:: xmlResponse
-        String with the raw XML response to the WPS request. 
+        Array of pair lists composed by the output name and a boolean indicating return
+        by reference (True) or data (False)
+         
+    .. attribute:: wps
+        WPSExecution object used to communicate with the WPS server
+               
+    .. attribute:: execution
+        WebProcessingService object used to invoke process execution on the remote WPS server
             
     .. attribute:: statusURL
         URL of the remote XML file where the process updates its status and 
@@ -98,14 +93,6 @@ class WPSClient:
         
     .. attribute:: statusMessage
         Last status message returned during asynchronous execution
-            
-    .. attribute:: resultsComplex
-        Vector of ComplexOutput objects harbouring the complex results produced
-        by the remote process
-    
-    .. attribute:: resultsLiteral
-        Vector of LiteralOutput objects harbouring the complex results produced
-        by the remote process
     
     .. attribute:: map
         Object of type MapFile used to generate the map file publishing complex
@@ -149,18 +136,14 @@ class WPSClient:
     
     serverAddress = None
     processName = None
-    inputNames = None
-    inputValues = None
-    outputNames = None
-    outputTitles = {}
-    xmlPost = None
-    xmlResponse = None
+    inputs = None
+    outputs = None
+    wps = None
+    execution = None
     statusURL = None
     processId = None
     percentCompleted = 0
     statusMessage = None
-    resultsComplex = []
-    resultsLiteral = []
     map  = None
     epsg = None
     
@@ -200,11 +183,13 @@ class WPSClient:
     
     #Messages
     WARN_01 = "Output titles missing or incomplete, using names."
-    WARN_02 = "Warning: couldn't determine the type of Complex output "
+    WARN_02 = "Output "
+    WARN_03 = " not added to the map file, possibly non complex output."
+    WARN_04 = "No spatial layers found, no map file was written."
     ERR_01  = "Different number of input names and values."
     ERR_02  = "It wasn't possible to build a request with the given arguments."
     ERR_03  = "It wasn't possible to process the server address:\n"
-    ERR_04  = "No status location URL found in response."
+    ERR_04  = "EXECUTE request failed:\n"
     ERR_05  = "Incomplete request -- missing URL"
     ERR_06  = "The process failed with the following message:\n"
     ERR_07  = "Failed to save map file to disk:\n"
@@ -219,7 +204,7 @@ class WPSClient:
             self.setupLogging()
             
         
-    def init(self, serverAddress, processName, inputNames, inputValues, outputNames, outputTitles):
+    def init(self, serverAddress, processName, inputs, outputs):
         """
         Initialises the WPSClient object with the required arguments to create
         the WPS request.
@@ -232,20 +217,19 @@ class WPSClient:
         """
         
         # Loading this stuff here probably doesn't make sense
-        # Check at a later data if __init__ is run from an external model (tha includes this one)
+        # Check at a later data if __init__ is run from an external model (that includes this one)
         self.loadConfigs()
         self.setupLogging()
         
         self.serverAddress = serverAddress
         self.processName = processName
-        self.inputNames = inputNames
-        self.inputValues = inputValues
-        self.outputNames = outputNames       
+        self.inputs = inputs
+        self.outputs = outputs
         
-        self.processOutputTitles(outputNames, outputTitles)
+        self.wps = WebProcessingService(serverAddress, verbose=False, skip_caps=True)       
         
         
-    def initFromURL(self, url, outputNames, outputTitles):
+    def initFromURL(self, url, outputs):
         """
         Initialises the WPSClient with the status URL address of a running 
         remote process. Used when a request has already been sent.
@@ -258,11 +242,10 @@ class WPSClient:
         self.loadConfigs()
         self.setupLogging()
         
+        # Note that the outputs are not used
         self.statusURL = url
+        self.outputs = outputs
         self.processId = self.decodeId(url)
-        
-        self.processOutputTitles(outputNames, outputTitles)
-        
         
     def loadConfigs(self):
         """ 
@@ -341,24 +324,6 @@ class WPSClient:
             #ch_file.setLevel(self.logLevel)
             ch_file.setFormatter(formatter)
             self.logger.addHandler(ch_file)            
-            
-    def processOutputTitles(self, outputNames, outputTitles):
-        """
-        Creates the dictionary with output names and output titles.
-           
-        :param outputNames: array with output names
-        :param outputTitles: array with output titles      
-        """
-        
-        if(len(outputNames) <> len(outputTitles)):
-            self.logger.warning(self.WARN_01)
-            for i in range(0, len(outputNames)):
-                self.outputTitles[outputNames[i]] = outputNames[i]
-                
-        else:
-            for i in range(0, len(outputNames)):
-                self.outputTitles[outputNames[i]] = outputTitles[i]
-        
         
     def decodeId(self, url):
         """
@@ -370,90 +335,24 @@ class WPSClient:
         
         s = url.split("/")
         return s[len(s) - 1].split(".")[0] 
-        
-    def buildRequest(self):
-        """
-        Creates the XMLPost object encoding the XML request to the WPS server,
-        storing it in the xmlPost attribute. 
-        """
-        
-        if len(self.inputNames) <> len(self.inputValues):
-            self.logger.error(self.ERR_01)
-            raise Exception(self.ERR_01)
-            return
-        
-        self.xmlPost = XMLPost(self.processName)
-        
-        for i in range(0, len(self.inputNames)):
-            if ("http://" in self.inputValues[i]): 
-                self.xmlPost.addRefInput(self.inputNames[i], self.inputValues[i])
-            else:
-                self.xmlPost.addLiteralInput(self.inputNames[i], self.inputValues[i])
-        
-        for o in self.outputNames:
-            self.xmlPost.addOutput(o)
             
     def sendRequest(self):
         """
-        Sends the XML request encoded by the xmlPost attribute to the remote 
-        WPS server through an HTTP Post. Process the response by storing the
+        Uses the wps object to start the process execution. Stores the
         status URL and the process in the statusURL and processId attributes.
         
         :returns: string with the status URL, None in case of error
         """
         
-        self.buildRequest()
+        self.execution = self.wps.execute(self.processName, self.inputs, self.outputs)
         
-        if(self.xmlPost == None):
-            self.logger.error(self.ERR_02)
-            raise Exception(self.ERR_02)
+        if len(self.execution.errors) > 0:
+            self.logger.error(self.ERR_04 + self.execution.errors[0].code + self.execution.errors[0].text)
+            raise Exception(self.ERR_04 + self.execution.errors[0].code + self.execution.errors[0].text)
             return None
         
-        request = self.xmlPost.getString()
-        if(request == None):
-            self.logger.error(self.ERR_02)
-            raise Exception(self.ERR_02)
-            return None
-        
-        rest = self.serverAddress.replace("http://", "")     
-        split = rest.split("/")
-        
-        if(len(split) < 2):
-            self.logger.error(self.ERR_03 + self.serverAddress)
-            raise Exception(self.ERR_03 + self.serverAddress)
-            return None
-        
-        host = split[0]
-        
-        api_url = rest.replace(host, "", 1)        
-        api_url = api_url.replace("?", "")
-        
-        self.logger.debug("API: " + api_url)
-        self.logger.debug("HOST: " + host)
-        self.logger.debug("Sending the request:\n")
-        self.logger.debug(request + "\n")
-        
-        webservice = httplib.HTTP(host)
-        webservice.putrequest("POST", api_url)
-        webservice.putheader("Host", host)
-        webservice.putheader("User-Agent","Python post")
-        webservice.putheader("Content-type", "text/xml; charset=\"UTF-8\"")
-        webservice.putheader("Content-length", "%d" % len(request))
-        webservice.endheaders()
-        webservice.send(request)
-        statuscode, statusmessage, header = webservice.getreply()
-        self.xmlResponse = webservice.getfile().read()
-        
-        self.logger.debug("Request info:" + str(statuscode) + str(statusmessage) + str(header))
-        self.logger.debug("Response:\n" + self.xmlResponse)
-        
-        try:
-            self.statusURL = self.xmlResponse.split("statusLocation=\"")[1].split("\"")[0]
-        except Exception, err:
-            self.logger.error(self.ERR_04)
-            raise Exception(self.ERR_04)
-            return None
-        
+        self.statusURL = self.execution.statusLocation
+        #** IS processId really needed?
         self.processId = self.decodeId(self.statusURL)
         
         return self.statusURL  
@@ -479,62 +378,36 @@ class WPSClient:
             raise Exception(self.ERR_05)
             return False
         
-        r = urllib2.urlopen(urllib2.Request(self.statusURL))
-        self.xmlResponse = r.read()
-        r.close()
+        self.execution = WPSExecution()
+        self.execution.statusLocation = self.statusURL
+        self.execution.checkStatus(sleepSecs=0)
+        
+        # Check if the process has finished
+        if not (self.execution.isComplete()):
+            self.status = self.RUNNING
+            self.logger.debug("The process hasn't finished yet.")
+            #** Are these properties still needed?
+            self.percentCompleted = self.execution.percentCompleted
+            self.statusMessage = self.execution.statusMessage
+            self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
+            return False
         
         # Check if the process failed
-        if (Tags.preFail in self.xmlResponse):
+        if not (self.execution.isSucceded()):
             self.status = self.ERROR
-            self.processError = self.xmlResponse.split(Tags.preFail)[1].split(Tags.sufFail)[0]
+            self.processError = self.execution.errors[0]
 
-            #                                             group1                     group2                          DOTALL makes multiline match easier
-            m = re.search('<ows:Exception.+exceptionCode="([^"]+).+<ows:ExceptionText>(.+)</ows:ExceptionText>', self.processError, re.DOTALL)
-            if m:
-                self.processErrorCode = m.group(1)
-                self.processErrorText = m.group(2).strip()
-            else:
-                self.processErrorCode = "Unknown"
-                self.processErrorText = "Unknown"
+            #** Are these properties still needed?
+            self.processErrorCode = self.processError.code
+            self.processErrorText = self.processError.text
 
             self.logger.error(self.ERR_06 + self.processErrorText)
             raise Exception(self.ERR_06 + self.processErrorText)
 
             return True
-           
-        # Check if the process has finished
-        if not (Tags.preSucc in self.xmlResponse):
-            self.status = self.RUNNING
-            self.logger.debug("The process hasn't finished yet.")
-            if ("percentCompleted" in self.xmlResponse):
-                temp = self.xmlResponse.split("percentCompleted=\"")[1]
-                rest = temp.split("\">")
-                self.percentCompleted = rest[0]
-                self.statusMessage = rest[1].split(Tags.prStart)[0]
-                self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
-            return False
         
         self.logger.debug(self.SUCC_01)
-        
-        # Process the results
-        outVector = self.xmlResponse.split(Tags.preOut)
         self.status = self.FINISHED
-        for o in outVector:
-            if o.count(Tags.preLit) > 0:
-                self.resultsLiteral.append(LiteralOutput(o))
-            elif o.count(Tags.preCplx) > 0:
-                self.resultsComplex.append(ComplexOutput(o, self.processId))
-            # Reference outputs
-            elif o.count(Tags.preRef) > 0:
-                # Assumes that Complex outputs have a mimeType
-                if o.count("mimeType") > 0:
-                    self.resultsComplex.append(ComplexOutput(o, self.processId))
-                else:
-                    self.resultsLiteral.append(LiteralOutput(o))
-                    
-        # Save complex outputs to disk
-        for c in self.resultsComplex:
-            c.saveToDisk(self.pathFilesGML)
                     
         return True           
             
@@ -577,54 +450,61 @@ class WPSClient:
         self.map.meta_contactinstructions = self.meta_contactinstructions
         self.map.meta_hoursofservice = self.meta_hoursofservice
         
-        for c in self.resultsComplex:
+        for output in self.execution.processOutputs:
             
-            if c.dataSet <> None:
-                       
-                if c.dataSet.dataType == c.dataSet.TYPE_VECTOR:
-                    style = UMN.MapStyle()
-                    layer = UMN.VectorLayer(
-                                            c.path, 
-                                            c.dataSet.getBBox(), 
-                                            c.dataSet.getEPSG(), 
-                                            c.name,
-                                            self.outputTitles[c.name])
-                    type = str(c.dataSet.getGeometryType())
-                    if type <> None:
-                        layer.layerType = type
-                    else:
-                        layer.layerType = "Polygon"
-                    self.logger.debug("The layer type: " + str(c.dataSet.getGeometryType()))
-                    layer.addStyle(style)
-                    self.map.addLayer(layer)
-                    self.logger.debug("Generated layer " + layer.name + " of type " + layer.layerType + ".")
-                  
-                elif c.dataSet.dataType == c.dataSet.TYPE_RASTER:
-                    layer = UMN.RasterLayer(
-                                            c.path, 
-                                            c.dataSet.getBBox(), 
-                                            c.dataSet.getEPSG(), 
-                                            c.name,
-                                            self.outputTitles[c.name])
-                    layer.setBounds(c.dataSet.getMaxValue(), c.dataSet.getMinValue())
-                    self.map.addLayer(layer)
-                    self.logger.debug("Generated layer " + layer.name + " of type raster.")
-                    
+            #** Solve the issue with the slash
+            output.writeToDisk(self.pathFilesGML + "/");
+            
+            dataSet = DataSet(output.filePath)
+                                   
+            if dataSet.dataType == dataSet.TYPE_VECTOR:
+                style = UMN.MapStyle()
+                layer = UMN.VectorLayer(
+                    output.filePath, 
+                    dataSet.getBBox(), 
+                    dataSet.getEPSG(), 
+                    output.identifier,
+                    output.title)
+                type = str(dataSet.getGeometryType())
+                if type <> None:
+                    layer.layerType = type
                 else:
-                    self.logger.warning(self.WARN_02 + c.name)
-                    
+                    layer.layerType = "Polygon"
+                self.logger.debug("The layer type: " + str(dataSet.getGeometryType()))
+                layer.addStyle(style)
+                self.map.addLayer(layer)
+                self.logger.debug("Generated layer " + layer.name + " of type " + layer.layerType + ".")
+                  
+            elif dataSet.dataType == dataSet.TYPE_RASTER:
+                layer = UMN.RasterLayer(
+                    output.filePath, 
+                    dataSet.getBBox(), 
+                    dataSet.getEPSG(), 
+                    output.identifier,
+                    output.title)
+                layer.setBounds(dataSet.getMaxValue(), dataSet.getMinValue())
+                self.map.addLayer(layer)
+                self.logger.debug("Generated layer " + layer.name + " of type raster.")
                 
-
-        try :
-            self.map.writeToDisk()
-        except Exception, e:
-            self.logger.error(self.ERR_07 + str(e))
-            raise Exception(self.ERR_07 + str(e))
-            return
-        
-        self.logger.info(self.SUCC_02 + self.map.filePath())
+            else:
+                self.logger.warning(self.WARN_02 + output.identifier + self.WARN_03)
+                
+        if (len(self.map.layers) > 0):
+                    
+            try :
+                self.map.writeToDisk()
+            except Exception, e:
+                self.logger.error(self.ERR_07 + str(e))
+                raise Exception(self.ERR_07 + str(e))
+                return
             
-        return self.map.filePath()
+            self.logger.info(self.SUCC_02 + self.map.filePath())
+            return self.map.filePath()
+        
+        else:
+            
+            self.logger.info(self.WARN_04)
+            return None
         
     def getMapFilePath(self):
         """

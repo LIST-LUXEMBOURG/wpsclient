@@ -28,17 +28,14 @@ class TestRand(Test):
     
         Test.__init__(self)
         
-        self.outputNames = ["rand", "region", "num"]
-        self.outputTitles = ["rand", "region", "num"]
+        self.outputs = [("rand", "True"), ("region", "True"), ("num", "True")]
         
         # Basic test with literal inputs
         self.iniCli.init(
             #"http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             "http://localhost/cgi-bin/pywps.cgi?",
             "test_rand_map", 
-            ["delay"], 
-            ["1"],
-            self.outputNames,
-            self.outputTitles)
+            [("delay","10")], 
+            self.outputs)
 
         

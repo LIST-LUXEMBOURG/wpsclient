@@ -108,7 +108,7 @@ class DataSet:
 		if self.dataSet:
 			return self.TYPE_VECTOR
 		else:
-			logging.error("It wasn't possible to import the dataset using gdal or ogr.")
+			logging.info("It wasn't possible to import the dataset using gdal or ogr.")
 			return None
 
 	def getSpatialReference(self):
