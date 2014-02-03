@@ -62,8 +62,8 @@ class Test:
                     print str(e)
                     sys.exit()    
                 print "Process still running"
-                print str(statCli.percentCompleted) + "% completed"
-                print "Status message: " + str(statCli.statusMessage)
+                print str(statCli.getPercentCompleted()) + "% completed"
+                print "Status message: " + str(statCli.getStatusMessage())
                 time.sleep(10)
                 
             if(statCli.status == statCli.ERROR):

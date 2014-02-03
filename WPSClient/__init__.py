@@ -51,9 +51,6 @@ class WPSClient:
         
     .. attribute:: logFormat
         String formating log output
-    
-    .. attribute:: serverAddress
-        Address of the WPS server where the process to invoke resides
         
     .. attribute:: processName
         Name of the process to invoke
@@ -61,7 +58,7 @@ class WPSClient:
     .. attribute:: inputs
         Array of pair lists composed by the input name and the respective value
     
-    .. attribute:: outputNames
+    .. attribute:: outputs
         Array of pair lists composed by the output name and a boolean indicating return
         by reference (True) or data (False)
          
@@ -125,7 +122,6 @@ class WPSClient:
     logger = None
     logFormat = "[WPSClient][%(asctime)s] %(levelname)s: %(message)s"
     
-    serverAddress = None
     processName = None
     inputs = None
     outputs = None
@@ -212,7 +208,6 @@ class WPSClient:
         self.loadConfigs()
         self.setupLogging()
         
-        self.serverAddress = serverAddress
         self.processName = processName
         self.inputs = inputs
         self.outputs = outputs
@@ -326,6 +321,42 @@ class WPSClient:
         
         s = url.split("/")
         return s[len(s) - 1].split(".")[0] 
+    
+    def getPercentCompleted(self):
+        """
+        :returns: process execution progress in percentage   
+        """
+        if (self.execution is not None): 
+            return self.execution.percentCompleted
+        else:
+            return None
+        
+    def getStatusMessage(self):
+        """
+        :returns: last status message returned by the server   
+        """
+        if (self.execution is not None):
+            return self.execution.statusMessage
+        else:
+            return None
+        
+    def getProcessErrorCode(self):
+        """
+        :returns: last error code returned by the server   
+        """
+        if (self.processError is not None):
+            return self.processError.code
+        else:
+            return None
+        
+    def getProcessErrorText(self):
+        """
+        :returns: last error message returned by the server   
+        """
+        if (self.processError is not None):
+            return self.processError.text
+        else:
+            return None
             
     def sendRequest(self):
         """
@@ -343,7 +374,6 @@ class WPSClient:
             return None
         
         self.statusURL = self.execution.statusLocation
-        #** IS processId really needed?
         self.processId = self.decodeId(self.statusURL)
         
         return self.statusURL  
@@ -377,9 +407,6 @@ class WPSClient:
         if not (self.execution.isComplete()):
             self.status = self.RUNNING
             self.logger.debug("The process hasn't finished yet.")
-            #** Are these properties still needed?
-            self.percentCompleted = self.execution.percentCompleted
-            self.statusMessage = self.execution.statusMessage
             self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
             return False
         
@@ -387,10 +414,6 @@ class WPSClient:
         if not (self.execution.isSucceded()):
             self.status = self.ERROR
             self.processError = self.execution.errors[0]
-
-            #** Are these properties still needed?
-            self.processErrorCode = self.processError.code
-            self.processErrorText = self.processError.text
 
             self.logger.error(self.ERR_06 + self.processErrorText)
             raise Exception(self.ERR_06 + self.processErrorText)
