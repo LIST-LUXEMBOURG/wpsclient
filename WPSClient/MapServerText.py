@@ -71,7 +71,7 @@ class MapFile:
 
     name            = None 
     bBox            = (91979, 436326, 92617, 437659.5)
-    shapePath       = "/home/desousa/Tudor/MUSIC/Rotterdam"
+    shapePath       = "/srv/data/"
     epsgCode        = "28992"
     serviceTitle    = "A mapping service generated with the iGUESS WPS Client."
     mapTemplate     = "/var/www/MapServ/map.html"

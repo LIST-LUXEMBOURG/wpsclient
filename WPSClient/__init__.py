@@ -467,7 +467,7 @@ class WPSClient:
         for output in self.execution.processOutputs:
             
             #** Solve the issue with the slash
-            output.writeToDisk(self.pathFilesGML + "/");
+            output.writeToDisk(self.pathFilesGML);
             
             dataSet = DataSet(output.filePath)
                                    

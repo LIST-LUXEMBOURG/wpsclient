@@ -3,7 +3,7 @@ logFile: /tmp/WPSClient.log
 logLevel: DEBUG
 
 [Data]
-GMLfilesPath: /var/www/tmp
+GMLfilesPath: /var/www/tmp/
 
 [MapServer]
 MapServerURL: http://localhost/cgi-bin/mapserv?map=
