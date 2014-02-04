@@ -173,13 +173,9 @@ class WPSClient:
     ERROR = 3
     
     #Messages
-    WARN_01 = "Output titles missing or incomplete, using names."
     WARN_02 = "Output "
     WARN_03 = " not added to the map file, possibly non complex output."
     WARN_04 = "No spatial layers found, no map file was written."
-    ERR_01  = "Different number of input names and values."
-    ERR_02  = "It wasn't possible to build a request with the given arguments."
-    ERR_03  = "It wasn't possible to process the server address:\n"
     ERR_04  = "EXECUTE request failed:\n"
     ERR_05  = "Incomplete request -- missing URL"
     ERR_06  = "The process failed with the following message:\n"
