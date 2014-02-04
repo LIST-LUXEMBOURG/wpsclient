@@ -14,21 +14,30 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Nov 22, 2013
+Created on Nov 21, 2013
 
 @author: desousa
 '''
 
-from Tests import *
+from Example import Example
+import WPSClient
 
-#t = TestAsynch.TestAsynch()
-#t = TestBufferGML.TestBufferGML()
-#t = TestBufferWFS.TestBufferWFS()
-#t = TestDijkstra.TestDijkstra()
-#t = TestPVPotential.TestPVPotential()
-#t = TestLogging.TestLogging()
-#t = TestNoise.TestNoise()
-#t = TestSlopeAspect.TestSlopeAspect()
-t = TestRand.TestRand()
+class BufferGML(Example):
 
-t.run()
+    def __init__(self):
+    
+        Example.__init__(self)
+        
+        self.outputNames = ["buffered_vector"]
+        self.outputTitles = ["buffered_vector"]
+        
+        # Test with a remote GML resource
+        self.iniCli.init(
+            "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+            "buffer", 
+            ["buffer_width","vector"], 
+            ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
+            self.outputNames,
+            self.outputTitles)
+
+        

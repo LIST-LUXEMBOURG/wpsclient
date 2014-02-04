@@ -19,14 +19,14 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
-from Test import Test
+from Example import Example
 import WPSClient
 
-class TestPVPotential(Test):
+class PVPotential(Example):
 
 	def __init__(self):
 	
-		Test.__init__(self)
+		Example.__init__(self)
         
 		self.outputNames = ["pv_potential"]
 		self.outputTitles = ["pv_potential"]

@@ -19,29 +19,22 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
-from Test import Test
+from Example import Example
 import WPSClient
 
-class TestBufferWFS(Test):
+class Asynch(Example):
 
     def __init__(self):
+        
+        Example.__init__(self)
     
-        Test.__init__(self)
+        self.outputs = [("num","True")]
         
-        self.outputNames = ["buffered_vector"]
-        self.outputTitles = ["BufferedRegions"]
-        
-        # Test with a WFS resource
+		# Test asynchronous processing
         self.iniCli.init(
-		    # Process Server address
-		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-		    # Process name
-		    "buffer", 
-		    # Input names
-		    ["buffer_width","vector"], 
-		    # Input values - '&' character must be passed as '&amp;'
-		    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
-		    # Output names
-		    self.outputNames,
-		    #Output titles
-		    self.outputTitles)
+		    "http://localhost/cgi-bin/pywps.cgi?", 
+		    "test_status", 
+		    [("delay", "50")], 
+		    self.outputs)
+
+        

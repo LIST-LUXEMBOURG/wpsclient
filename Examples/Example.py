@@ -23,7 +23,7 @@ import sys
 import time
 import WPSClient
 
-class Test:
+class Example:
     
     iniCli = None
     outputs = None

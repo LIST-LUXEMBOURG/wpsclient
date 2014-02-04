@@ -14,36 +14,34 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Jan 17, 2014
+Created on Nov 21, 2013
 
 @author: desousa
 '''
 
-from Test import Test
+from Example import Example
 import WPSClient
 
-class TestDijkstra(Test):
+class BufferWFS(Example):
 
     def __init__(self):
     
-        Test.__init__(self)
+        Example.__init__(self)
         
-        self.outputNames = ["path"]
-        self.outputTitles = ["ShortestPath"]
+        self.outputNames = ["buffered_vector"]
+        self.outputTitles = ["BufferedRegions"]
         
         # Test with a WFS resource
         self.iniCli.init(
 		    # Process Server address
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 		    # Process name
-		    "dijkstra", 
+		    "buffer", 
 		    # Input names
-		    ["network", "start", "target"], 
+		    ["buffer_width","vector"], 
 		    # Input values - '&' character must be passed as '&amp;'
-		    ["Lux", "30", "60"],
+		    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
 		    # Output names
 		    self.outputNames,
 		    #Output titles
 		    self.outputTitles)
-        
-        

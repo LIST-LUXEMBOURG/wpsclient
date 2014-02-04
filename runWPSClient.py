@@ -14,27 +14,21 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Nov 21, 2013
+Created on Nov 22, 2013
 
 @author: desousa
 '''
 
-from Test import Test
-import WPSClient
+from Examples import *
 
-class TestAsynch(Test):
+#t = Asynch.Asynch()
+#t = BufferGML.BufferGML()
+#t = BufferWFS.BufferWFS()
+#t = Dijkstra.Dijkstra()
+#t = PVPotential.PVPotential()
+#t = Logging.Logging()
+#t = Noise.Noise()
+#t = SlopeAspect.SlopeAspect()
+t = Rand.Rand()
 
-    def __init__(self):
-        
-        Test.__init__(self)
-    
-        self.outputs = [("num","True")]
-        
-		# Test asynchronous processing
-        self.iniCli.init(
-		    "http://localhost/cgi-bin/pywps.cgi?", 
-		    "test_status", 
-		    [("delay", "50")], 
-		    self.outputs)
-
-        
+t.run()

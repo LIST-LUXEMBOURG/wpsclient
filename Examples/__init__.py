@@ -19,25 +19,16 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
-from Test import Test
-import WPSClient
-
-class TestBufferGML(Test):
-
-    def __init__(self):
-    
-        Test.__init__(self)
-        
-        self.outputNames = ["buffered_vector"]
-        self.outputTitles = ["buffered_vector"]
-        
-        # Test with a remote GML resource
-        self.iniCli.init(
-            "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-            "buffer", 
-            ["buffer_width","vector"], 
-            ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
-            self.outputNames,
-            self.outputTitles)
-
-        
+__all__ = ["Asynch",
+           "BufferGML",
+           "BufferWFS",
+           "Dijkstra",
+           "Logging",
+           "Noise",
+           "PVPotential",
+           "Rand",
+           "SlopeAspect",
+           "SolarCadastre",
+           "SolarIrradiation",
+           "SolarSegmentation",
+           "UltimateQuestion"]

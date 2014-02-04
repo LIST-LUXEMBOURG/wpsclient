@@ -19,30 +19,31 @@ Created on Nov 21, 2013
 @author: desousa
 '''
 
-from Test import Test
+from Example import Example
 import WPSClient
 
-class TestUltimateQuestion(Test):
+class Noise(Example):
 
     def __init__(self):
     
-        Test.__init__(self)
+        Example.__init__(self)
         
-        self.outputNames = ["answer"]
-        self.outputTitles = ["answer"]
+        self.outputNames = ["noise"]
+        self.outputTitles = ["NoisyMap"]
         
-        # Test with a WFS resource
+        # Test with noise process
         self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
-            "ultimatequestionprocess", 
+            "noise", 
             # Input names
-            [], 
+            ["input"], 
             # Input values - '&' character must be passed as '&amp;'
-            [],
+            ["http://maps.iguess.tudor.lu/pywps/sampleData/lb_dem_10m_small.tiff"],
             # Output names
             self.outputNames,
             #Output titles
             self.outputTitles)
+
         

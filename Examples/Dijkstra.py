@@ -14,28 +14,36 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Nov 21, 2013
+Created on Jan 17, 2014
 
 @author: desousa
 '''
 
-from Test import Test
+from Example import Example
 import WPSClient
 
-class TestRand(Test):
+class Dijkstra(Example):
 
     def __init__(self):
     
-        Test.__init__(self)
+        Example.__init__(self)
         
-        self.outputs = [("rand", "True"), ("region", "True"), ("num", "True")]
+        self.outputNames = ["path"]
+        self.outputTitles = ["ShortestPath"]
         
-        # Basic test with literal inputs
+        # Test with a WFS resource
         self.iniCli.init(
-            #"http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-            "http://localhost/cgi-bin/pywps.cgi?",
-            "test_rand_map", 
-            [("delay","10")], 
-            self.outputs)
-
+		    # Process Server address
+		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+		    # Process name
+		    "dijkstra", 
+		    # Input names
+		    ["network", "start", "target"], 
+		    # Input values - '&' character must be passed as '&amp;'
+		    ["Lux", "30", "60"],
+		    # Output names
+		    self.outputNames,
+		    #Output titles
+		    self.outputTitles)
+        
         
