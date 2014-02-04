@@ -89,7 +89,10 @@ class WPSClient:
     .. attribute:: epsg
         EPSG code of the primary coordinate system used to publish complex 
         outputs
-        
+     
+    .. attribute:: dataSets
+        Array with output dataSets, created during map file generation
+               
     .. attribute:: logFile
         Path to the log file
         
@@ -133,6 +136,7 @@ class WPSClient:
     statusMessage = None
     map  = None
     epsg = None
+    dataSets = []
     
     #Configs
     logFile      = None
@@ -466,10 +470,10 @@ class WPSClient:
         
         for output in self.execution.processOutputs:
             
-            #** Solve the issue with the slash
             output.writeToDisk(self.pathFilesGML);
             
-            dataSet = DataSet(output.filePath)
+            dataSet = DataSet(output.filePath, output.title, output.identifier)
+            self.dataSets.append(dataSet)
                                    
             if dataSet.dataType == dataSet.TYPE_VECTOR:
                 style = UMN.MapStyle()
