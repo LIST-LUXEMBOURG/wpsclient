@@ -1,0 +1,6 @@
+[submodule "MapFileText"]
+	path = MapFileText
+	url = https://github.com/ldesousa/MapFileText.git
+[submodule "WPSClient/MapFileText"]
+	path = WPSClient/MapFileText
+	url = https://github.com/ldesousa/MapFileText.git

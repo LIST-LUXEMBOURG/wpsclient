@@ -37,7 +37,8 @@ import logging
 from ConfigParser import SafeConfigParser
 from owslib.wps import WebProcessingService, WPSExecution
 from DataSet import DataSet
-import MapServerText as UMN
+#import MapServerText as UMN
+from MapFileText.Text import MapFile, RasterLayer, VectorLayer, MapStyle
 
 ##########################################################
 
@@ -434,7 +435,8 @@ class WPSClient:
         :returns: string with the path to the map file generated.
         """
         
-        self.map = UMN.MapFile(self.processId)
+        #self.map = UMN.MapFile(self.processId)
+        self.map = MapFile(self.processId)
         
         self.map.shapePath    = self.pathFilesGML
         self.map.epsgCode     = self.epsg
@@ -472,8 +474,10 @@ class WPSClient:
             self.dataSets.append(dataSet)
                                    
             if dataSet.dataType == dataSet.TYPE_VECTOR:
-                style = UMN.MapStyle()
-                layer = UMN.VectorLayer(
+                #* style = UMN.MapStyle()
+                style = MapStyle()
+                #* layer = UMN.VectorLayer(
+                layer = VectorLayer(
                     output.filePath, 
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
@@ -490,7 +494,8 @@ class WPSClient:
                 self.logger.debug("Generated layer " + layer.name + " of type " + layer.layerType + ".")
                   
             elif dataSet.dataType == dataSet.TYPE_RASTER:
-                layer = UMN.RasterLayer(
+                #layer = UMN.RasterLayer(
+                layer = RasterLayer(
                     output.filePath, 
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
