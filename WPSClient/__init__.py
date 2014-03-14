@@ -31,6 +31,7 @@ This package is released under the GPL-3.0 open source license [4].
 [3] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
 [4] http://opensource.org/licenses/GPL-3.0
 '''
+from debian.debtags import output
 __all__ = ["DataSet","MapServerText"]
 
 import logging
@@ -367,7 +368,14 @@ class WPSClient:
         :returns: string with the status URL, None in case of error
         """
         
-        self.execution = self.wps.execute(self.processName, self.inputs, self.outputs)
+        execOutputs = []
+        for key in self.outputs:
+            execOutputs.append((key, "True"))
+        
+        self.execution = self.wps.execute(self.processName, self.inputs, execOutputs)
+        
+        self.logger.info("The request sent: \n" + self.execution.request)
+        self.logger.debug("The status URL: " + self.execution.statusLocation)
         
         if len(self.execution.errors) > 0:
             self.logger.error(self.ERR_04 + self.execution.errors[0].code + self.execution.errors[0].text)
@@ -418,6 +426,7 @@ class WPSClient:
             self.processErrorText = self.execution.errors[0].text
 
             self.logger.error(self.ERR_06 + self.processErrorText)
+            self.logger.debug("The status URL: " + self.execution.statusLocation)
             raise Exception(self.ERR_06 + self.processErrorText)
 
             return True
@@ -483,7 +492,8 @@ class WPSClient:
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
                     output.identifier,
-                    output.title)
+                    self.outputs[output.identifier])
+                    #output.title)
                 type = str(dataSet.getGeometryType())
                 if type <> None:
                     layer.layerType = type
@@ -501,7 +511,8 @@ class WPSClient:
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
                     output.identifier,
-                    output.title)
+                    self.outputs[output.identifier])
+                    #output.title)
                 layer.setBounds(dataSet.getMaxValue(), dataSet.getMinValue())
                 self.map.addLayer(layer)
                 self.logger.debug("Generated layer " + layer.name + " of type raster.")

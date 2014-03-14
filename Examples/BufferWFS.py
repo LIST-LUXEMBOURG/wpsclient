@@ -28,8 +28,7 @@ class BufferWFS(Example):
     
         Example.__init__(self)
         
-        self.outputNames = ["buffered_vector"]
-        self.outputTitles = ["BufferedRegions"]
+        self.outputs = {"buffered_vector":"BufferedRegions"}
         
         # Test with a WFS resource
         self.iniCli.init(
@@ -37,11 +36,11 @@ class BufferWFS(Example):
 		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
 		    # Process name
 		    "buffer", 
-		    # Input names
-		    ["buffer_width","vector"], 
-		    # Input values - '&' character must be passed as '&amp;'
-		    ["5","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WFS&amp;CRS=EPSG:28992&amp;VERSION=1.0.0&amp;REQUEST=getFeature&amp;TYPENAME=RO_building_footprints_mini"],
-		    # Output names
-		    self.outputNames,
-		    #Output titles
-		    self.outputTitles)
+		    # Inputs
+		    [("buffer_width","5"),
+             ("vector","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&SERVICE=WFS&CRS=EPSG:28992&BBOX=92213.1,436672.0,92347.8,436795.0&VERSION=1.0.0&REQUEST=getFeature&TYPENAME=RO_building_footprints_mini")],
+		    # Output
+		    self.outputs)
+        
+        
+        

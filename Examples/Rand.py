@@ -28,7 +28,9 @@ class Rand(Example):
     
         Example.__init__(self)
         
-        self.outputs = [("random", "True"), ("region", "True"), ("num", "True")]
+        #self.outputs = [("random", "True"), ("region", "True"), ("num", "True")]
+        
+        self.outputs = {"random":"RandomLayer", "region":"RegionLayer", "num":"Number"}
         
         # Basic test with literal inputs
         self.iniCli.init(

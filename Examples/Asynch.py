@@ -28,7 +28,7 @@ class Asynch(Example):
         
         Example.__init__(self)
     
-        self.outputs = [("num","True")]
+        self.outputs = {"num":"Number"}
         
 		# Test asynchronous processing
         self.iniCli.init(

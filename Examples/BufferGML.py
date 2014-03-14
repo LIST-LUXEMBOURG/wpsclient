@@ -28,16 +28,20 @@ class BufferGML(Example):
     
         Example.__init__(self)
         
-        self.outputNames = ["buffered_vector"]
-        self.outputTitles = ["buffered_vector"]
+        #self.outputNames = ["buffered_vector"]
+        #self.outputTitles = ["buffered_vector"]
+        
+        self.outputs = {"buffered_vector":"MyBuffer"}
         
         # Test with a remote GML resource
         self.iniCli.init(
-            "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+            #"http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+            "http://localhost/cgi-bin/pywps.cgi?",
             "buffer", 
-            ["buffer_width","vector"], 
-            ["5","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml"],
-            self.outputNames,
-            self.outputTitles)
+            [("buffer_width","5"),
+             ("vector","http://services.iguess.tudor.lu/pywps/sampleData/testLines4326.gml")],
+            self.outputs)
+            #self.outputNames,
+            #self.outputTitles)
 
         

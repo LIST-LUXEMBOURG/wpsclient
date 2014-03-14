@@ -23,12 +23,12 @@ from Examples import *
 
 #t = Asynch.Asynch()
 #t = BufferGML.BufferGML()
-#t = BufferWFS.BufferWFS()
+t = BufferWFS.BufferWFS()
 #t = Dijkstra.Dijkstra()
 #t = PVPotential.PVPotential()
 #t = Logging.Logging()
 #t = Noise.Noise()
 #t = SlopeAspect.SlopeAspect()
-t = Rand.Rand()
+#t = Rand.Rand()
 
 t.run()
