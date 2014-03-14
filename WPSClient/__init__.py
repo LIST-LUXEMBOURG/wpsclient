@@ -415,6 +415,7 @@ class WPSClient:
         if not (self.execution.isSucceded()):
             self.status = self.ERROR
             self.processError = self.execution.errors[0]
+            self.processErrorText = self.execution.errors[0].text
 
             self.logger.error(self.ERR_06 + self.processErrorText)
             raise Exception(self.ERR_06 + self.processErrorText)

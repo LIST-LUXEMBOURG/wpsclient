@@ -28,7 +28,7 @@ class Rand(Example):
     
         Example.__init__(self)
         
-        self.outputs = [("rand", "True"), ("region", "True"), ("num", "True")]
+        self.outputs = [("random", "True"), ("region", "True"), ("num", "True")]
         
         # Basic test with literal inputs
         self.iniCli.init(
