@@ -480,7 +480,8 @@ class WPSClient:
             
             output.writeToDisk(self.pathFilesGML);
             
-            dataSet = DataSet(output.filePath, output.title, output.identifier)
+            providedTitle = self.outputs[output.identifier]
+            dataSet = DataSet(output.filePath, providedTitle, output.identifier)
             self.dataSets.append(dataSet)
                                    
             if dataSet.dataType == dataSet.TYPE_VECTOR:
@@ -492,8 +493,7 @@ class WPSClient:
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
                     output.identifier,
-                    self.outputs[output.identifier])
-                    #output.title)
+                    providedTitle)
                 type = str(dataSet.getGeometryType())
                 if type <> None:
                     layer.layerType = type
@@ -511,8 +511,7 @@ class WPSClient:
                     dataSet.getBBox(), 
                     dataSet.getEPSG(), 
                     output.identifier,
-                    self.outputs[output.identifier])
-                    #output.title)
+                    providedTitle)
                 layer.setBounds(dataSet.getMaxValue(), dataSet.getMinValue())
                 self.map.addLayer(layer)
                 self.logger.debug("Generated layer " + layer.name + " of type raster.")
