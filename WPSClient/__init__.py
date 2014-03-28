@@ -427,7 +427,7 @@ class WPSClient:
                 self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
                 return False
         except:
-            raise Exception("  isComplete")
+            raise Exception("Problem running isComplete")
         
         # Check if the process failed
         try:
