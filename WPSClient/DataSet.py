@@ -166,8 +166,6 @@ class DataSet:
 
 		if self.dataType == self.TYPE_RASTER:
 			geotransform = self.dataSet.GetGeoTransform()
-			#height = self.dataSet.RasterYSize
-			#width = self.dataSet.RasterXSize
 			return (geotransform[0],
 				    geotransform[0]+geotransform[1]*self.dataSet.RasterXSize,
 				    geotransform[3]+geotransform[5]*self.dataSet.RasterYSize,
@@ -181,7 +179,15 @@ class DataSet:
 		:returns: pixel resolution [width, height]
 		"""		
 		if self.dataType == self.TYPE_RASTER:
-			return (self.dataSet.RasterXSize, self.dataSet.RasterYSize)
+			geotransform = self.dataSet.GetGeoTransform()
+			return (geotransform[1], geotransform[5])
+		
+	def getDriver(self):
+		"""
+		:returns: image driver
+		"""
+		if self.dataType == self.TYPE_RASTER:
+			return self.dataSet.GetDriver().LongName
 		
 	def getGeometryType(self):
 		"""
