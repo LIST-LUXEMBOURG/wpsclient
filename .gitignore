@@ -4,6 +4,7 @@
 WPSClient.cfg
 WPSClient.cfg
 WPSClient.cfg
+.settings
 .settings/org.eclipse.core.resources.prefs
 ows_exec.py
 ows_fetch.py

@@ -176,6 +176,13 @@ class DataSet:
 			layer = self.dataSet.GetLayer()
 			return layer.GetExtent()
 		
+	def getPixelRes(self):
+		"""
+		:returns: pixel resolution [width, height]
+		"""		
+		if self.dataType == self.TYPE_RASTER:
+			return (self.dataSet.RasterXSize, self.dataSet.RasterYSize)
+		
 	def getGeometryType(self):
 		"""
 		:returns: string with type of geometry in a vector layer: "Point", 
