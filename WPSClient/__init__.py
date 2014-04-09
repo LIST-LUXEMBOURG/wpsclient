@@ -407,29 +407,42 @@ class WPSClient:
             self.logger.error(self.ERR_05)
             raise Exception(self.ERR_05)
             return False
-        
-        self.execution = WPSExecution()
-        self.execution.statusLocation = self.statusURL
-        self.execution.checkStatus(sleepSecs=0)
+
+        try:        
+            self.execution = (WPSExecution)()
+        except:
+            raise Exception("Problem running WPSExecution")
+
+        try:            
+            self.execution.statusLocation = self.statusURL
+            self.execution.checkStatus(sleepSecs=0)
+        except:
+            raise Exception("Problem running checkStatus")
         
         # Check if the process has finished
-        if not (self.execution.isComplete()):
-            self.status = self.RUNNING
-            self.logger.debug("The process hasn't finished yet.")
-            self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
-            return False
+        try:
+            if not (self.execution.isComplete()):
+                self.status = self.RUNNING
+                self.logger.debug("The process hasn't finished yet.")
+                self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
+                return False
+        except:
+            raise Exception("Problem running isComplete")
         
         # Check if the process failed
-        if not (self.execution.isSucceded()):
-            self.status = self.ERROR
-            self.processError = self.execution.errors[0]
-            self.processErrorText = self.execution.errors[0].text
+        try:
+            if not (self.execution.isSucceded()):
+                self.status = self.ERROR
+                self.processError = self.execution.errors[0]
+                self.processErrorText = self.execution.errors[0].text
 
-            self.logger.error(self.ERR_06 + self.processErrorText)
-            self.logger.debug("The status URL: " + self.execution.statusLocation)
-            raise Exception(self.ERR_06 + self.processErrorText)
+                self.logger.error(self.ERR_06 + self.processErrorText)
+                self.logger.debug("The status URL: " + self.execution.statusLocation)
+                raise Exception(self.ERR_06 + self.processErrorText)
 
-            return True
+                return True
+        except:
+            raise Exception("Problem running isSucceded")
         
         self.logger.debug(self.SUCC_01)
         self.status = self.FINISHED
