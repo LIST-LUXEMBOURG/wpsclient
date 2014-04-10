@@ -549,15 +549,24 @@ class WPSClient:
             self.logger.info(self.WARN_04)
             return None
         
+        
     def getMapFilePath(self):
         """
         Is this method really needed?
-        :returns: string with the path to the generated mapfile
+        :returns: string with the path to the generated map file
         """
        
         if self.map <> None:
             return self.map.filePath()
         else:
             return None     
+        
     
-    
+    def getMapFileTitle(self):
+        """
+        :returns: title of the generated map file
+        """
+        if self.map <> None:
+            return self.map.serviceTitle
+        else:
+            return None 
