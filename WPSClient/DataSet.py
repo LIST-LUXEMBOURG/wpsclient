@@ -161,7 +161,7 @@ class DataSet:
 
 	def getBBox(self):
 		"""
-		:returns: dataset bounding box
+		:returns: dataset bounding box [minX, maxX, minY, maxY]
 		"""
 
 		if self.dataType == self.TYPE_RASTER:
@@ -184,7 +184,7 @@ class DataSet:
 		
 	def getDriver(self):
 		"""
-		:returns: image driver
+		:returns: format driver (long name), e.g. GeoTIFF
 		"""
 		if self.dataType == self.TYPE_RASTER:
 			return self.dataSet.GetDriver().LongName
