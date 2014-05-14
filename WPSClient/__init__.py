@@ -420,29 +420,24 @@ class WPSClient:
             raise Exception("Problem running checkStatus")
         
         # Check if the process has finished
-        try:
-            if not (self.execution.isComplete()):
-                self.status = self.RUNNING
-                self.logger.debug("The process hasn't finished yet.")
-                self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
-                return False
-        except:
-            raise Exception("Problem running isComplete")
+        if not (self.execution.isComplete()):
+            self.status = self.RUNNING
+            self.logger.debug("The process hasn't finished yet.")
+            self.logger.info(str(self.percentCompleted) + " % of the execution complete.")
+            return False
         
         # Check if the process failed
-        try:
-            if not (self.execution.isSucceded()):
-                self.status = self.ERROR
-                self.processError = self.execution.errors[0]
-                self.processErrorText = self.execution.errors[0].text
+        if not (self.execution.isSucceded()):
+            self.status = self.ERROR
+            self.processError = self.execution.errors[0]
+            self.processErrorText = self.execution.errors[0].text
 
-                self.logger.error(self.ERR_06 + self.processErrorText)
-                self.logger.debug("The status URL: " + self.execution.statusLocation)
-                raise Exception(self.ERR_06 + self.processErrorText)
+            self.logger.error(self.ERR_06 + self.processErrorText)
+            self.logger.debug("The status URL: " + self.execution.statusLocation)
+            raise Exception(self.ERR_06 + self.processErrorText)
 
-                return True
-        except:
-            raise Exception("Problem running isSucceded")
+            return True
+
         
         self.logger.debug(self.SUCC_01)
         self.status = self.FINISHED
