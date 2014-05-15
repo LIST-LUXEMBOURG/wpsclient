@@ -30,7 +30,7 @@ class SlopeAspect(Example):
         
         self.outputs = {"slope":"Slope", "aspect":"Aspect"}
         
-        ## Test with solar cadastre single process
+        ## Test with slope and aspect process
         self.iniCli.init(
             # Process Server address
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
