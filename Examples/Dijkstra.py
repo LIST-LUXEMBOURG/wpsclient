@@ -28,22 +28,17 @@ class Dijkstra(Example):
     
         Example.__init__(self)
         
-        self.outputNames = ["path"]
-        self.outputTitles = ["ShortestPath"]
+        self.outputs = {"path":"ShortestPath"}
         
         # Test with a WFS resource
         self.iniCli.init(
 		    # Process Server address
-		    "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
+		    "http://wps.iguess.tudor.lu/cgi-bin/pywps-lamilo.cgi?", 
 		    # Process name
 		    "dijkstra", 
-		    # Input names
-		    ["network", "start", "target"], 
-		    # Input values - '&' character must be passed as '&amp;'
-		    ["Lux", "30", "60"],
-		    # Output names
-		    self.outputNames,
-		    #Output titles
-		    self.outputTitles)
+		    # Inputs
+		    [("network", "Lux"), ("start", "30"), ("target", "60")],
+		    # Outputs
+		    self.outputs)
         
         
