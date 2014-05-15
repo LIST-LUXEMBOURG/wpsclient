@@ -28,8 +28,7 @@ class Noise(Example):
     
         Example.__init__(self)
         
-        self.outputNames = ["noise"]
-        self.outputTitles = ["NoisyMap"]
+        self.outputs = {"noise":"NoisyMap"}
         
         # Test with noise process
         self.iniCli.init(
@@ -37,13 +36,9 @@ class Noise(Example):
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
             "noise", 
-            # Input names
-            ["input"], 
-            # Input values - '&' character must be passed as '&amp;'
-            ["http://maps.iguess.tudor.lu/pywps/sampleData/lb_dem_10m_small.tiff"],
-            # Output names
-            self.outputNames,
-            #Output titles
-            self.outputTitles)
+            # Inputs
+            [("input","http://maps.iguess.tudor.lu/pywps/sampleData/lb_dem_10m_small.tiff")],
+            # Outputs
+            self.outputs)
 
         
