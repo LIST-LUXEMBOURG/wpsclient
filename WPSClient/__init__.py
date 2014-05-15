@@ -521,6 +521,8 @@ class WPSClient:
                 self.logger.warning(self.WARN_02 + output.identifier + self.WARN_03)
                 
             self.logger.debug("Guessed mime type for this layer: " + str(dataSet.getMimeType()))
+            
+            print "The pixel res: " + str(dataSet.getPixelRes())
                 
         if (len(self.map.layers) > 0):
                     

@@ -201,7 +201,7 @@ class DataSet:
 		"""		
 		if self.dataType == self.TYPE_RASTER:
 			geotransform = self.dataSet.GetGeoTransform()
-			return (geotransform[1], geotransform[5])
+			return (abs(geotransform[1]), abs(geotransform[5]))
 		
 		
 	def getMimeType(self):
