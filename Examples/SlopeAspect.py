@@ -28,8 +28,7 @@ class SlopeAspect(Example):
     
         Example.__init__(self)
         
-        self.outputNames = ["slope", "aspect"]
-        self.outputTitles = ["Slope", "Aspect"]
+        self.outputs = {"slope":"Slope", "aspect":"Aspect"}
         
         ## Test with solar cadastre single process
         self.iniCli.init(
@@ -37,13 +36,9 @@ class SlopeAspect(Example):
             "http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
             # Process name
             "slope_aspect", 
-            # Input names
-            ["dem"], 
-            # Input values - '&' character must be passed as '&amp;'
-            ["http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1"],
-            # Output names
-            self.outputNames,
-            #Output titles
-            self.outputTitles)
+            # Inputs
+            [("dem","http://maps.iguess.tudor.lu/cgi-bin/mapserv?map=/srv/mapserv/MapFiles/RO_localOWS_test.map&amp;SERVICE=WCS&amp;VERSION=1.0.0&amp;REQUEST=GetCoverage&amp;IDENTIFIER=ro_dsm&amp;FORMAT=image/tiff&amp;BBOX=92217,436688,92313,436772&amp;CRS=EPSG:28992&amp;RESX=1&amp;RESY=1")],
+            # Outputs
+            self.outputs)
 
         
