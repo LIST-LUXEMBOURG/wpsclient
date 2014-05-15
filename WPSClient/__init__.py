@@ -408,16 +408,9 @@ class WPSClient:
             raise Exception(self.ERR_05)
             return False
 
-        try:        
-            self.execution = (WPSExecution)()
-        except:
-            raise Exception("Problem running WPSExecution")
-
-        try:            
-            self.execution.statusLocation = self.statusURL
-            self.execution.checkStatus(sleepSecs=0)
-        except:
-            raise Exception("Problem running checkStatus")
+        self.execution = WPSExecution()
+        self.execution.statusLocation = self.statusURL
+        self.execution.checkStatus(sleepSecs=0)
         
         # Check if the process has finished
         if not (self.execution.isComplete()):
