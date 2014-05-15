@@ -26,6 +26,7 @@ in the disk. This code is inspired in the UMN module of the PyWPS project [1].
 
 import logging
 import fileinput
+import mimetypes
 
 gdal=False
 #try:
@@ -58,6 +59,18 @@ class DataSet:
 		
 	.. attribute:: max
 		Maximum value (for raster datasets)
+				
+	.. attribute:: name
+		Maximum value (for raster datasets)
+				
+	.. attribute:: value
+		Stores the value for literal type data sets
+				
+	.. attribute:: uniqueID
+		Stores the unique ID for this data set
+				
+	.. attribute:: path
+		Path to the data set in disk
 	"""
 
 	dataSet=None
@@ -69,15 +82,18 @@ class DataSet:
 	name=None
 	value=""
 	uniqueID=None
+	path=None
 	
 	TYPE_VECTOR  = "vector" 
 	TYPE_RASTER  = "raster"
 	TYPE_LITERAL = "literal"
 
+
 	def __init__(self, path, name, uniqueID):
 		
 		self.name = name
 		self.uniqueID = uniqueID
+		self.path = path
 
 		self.dataType = self.getDataSet(path)
 		
@@ -89,6 +105,7 @@ class DataSet:
 		logging.debug("Read a data set of type " + str(self.dataType))
 		logging.debug("It has the following SRS: " + str(self.getEPSG()))
 		logging.debug("And the following bounds: " + str(self.getBBox()))
+
 
 	def getDataSet(self, path):
 		"""
@@ -126,6 +143,7 @@ class DataSet:
 			return self.TYPE_LITERAL
 			return None
 
+
 	def getSpatialReference(self):
 		"""
 		Loads the Spatial Reference System defined in the data set, storing it
@@ -144,6 +162,7 @@ class DataSet:
 			if ref:
 				self.spatialReference = ref
 
+
 	def getEPSG(self):
 		"""
 		:returns: Spatial Reference System EPSG code
@@ -158,6 +177,7 @@ class DataSet:
 		else:
 			code = self.spatialReference.GetAuthorityCode("GEOGCS")
 		return code
+
 
 	def getBBox(self):
 		"""
@@ -174,6 +194,7 @@ class DataSet:
 			layer = self.dataSet.GetLayer()
 			return layer.GetExtent()
 		
+		
 	def getPixelRes(self):
 		"""
 		:returns: pixel resolution [width, height]
@@ -182,12 +203,25 @@ class DataSet:
 			geotransform = self.dataSet.GetGeoTransform()
 			return (geotransform[1], geotransform[5])
 		
+		
+	def guessMimeType(self):
+		"""
+		:returns: a guessed mime type for this data set
+		"""		
+		if self.path is None:
+			return None
+		mimetypes.init()
+ 		mimetypes.guess_type('sdf')
+		return mimetypes.guess_type(self.path)[0]
+
+		
 	def getDriver(self):
 		"""
 		:returns: format driver (long name), e.g. GeoTIFF
 		"""
 		if self.dataType == self.TYPE_RASTER:
 			return self.dataSet.GetDriver().LongName
+		
 		
 	def getGeometryType(self):
 		"""
@@ -206,11 +240,13 @@ class DataSet:
 				return "Polygon"
 		return None
 	
+	
 	def getMaxValue(self):
 		"""
 		:returns: The maximum value of the data set (if raster type)
 		"""
 		return self.max
+		
 		
 	def getMinValue(self):
 		"""

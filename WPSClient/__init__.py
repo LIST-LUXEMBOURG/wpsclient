@@ -31,7 +31,7 @@ This package is released under the GPL-3.0 open source license [4].
 [3] http://wiki.rsg.pml.ac.uk/pywps/Main_Page
 [4] http://opensource.org/licenses/GPL-3.0
 '''
-from debian.debtags import output
+
 __all__ = ["DataSet","MapServerText"]
 
 import logging
@@ -526,6 +526,8 @@ class WPSClient:
                 
             else:
                 self.logger.warning(self.WARN_02 + output.identifier + self.WARN_03)
+                
+            self.logger.debug("Guessed mime type for this layer: " + str(dataSet.guessMimeType()))
                 
         if (len(self.map.layers) > 0):
                     
