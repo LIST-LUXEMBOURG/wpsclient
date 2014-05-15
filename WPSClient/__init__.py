@@ -520,7 +520,7 @@ class WPSClient:
             else:
                 self.logger.warning(self.WARN_02 + output.identifier + self.WARN_03)
                 
-            self.logger.debug("Guessed mime type for this layer: " + str(dataSet.guessMimeType()))
+            self.logger.debug("Guessed mime type for this layer: " + str(dataSet.getMimeType()))
                 
         if (len(self.map.layers) > 0):
                     

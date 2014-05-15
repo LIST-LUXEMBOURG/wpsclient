@@ -204,7 +204,7 @@ class DataSet:
 			return (geotransform[1], geotransform[5])
 		
 		
-	def guessMimeType(self):
+	def getMimeType(self):
 		"""
 		:returns: a guessed mime type for this data set
 		"""		
