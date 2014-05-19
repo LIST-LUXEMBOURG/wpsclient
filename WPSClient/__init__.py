@@ -394,7 +394,8 @@ class WPSClient:
         objects to fetch the results and stores them in the resultsLiteral and
         resultsComplex attributes.
         
-        :returns: True if succeeded, False in case of error
+        :returns: True if the process finished successfully 
+                  False if the process is still running
         :rtype: Boolean
         """
         
@@ -406,7 +407,6 @@ class WPSClient:
         if (self.statusURL == None):
             self.logger.error(self.ERR_05)
             raise Exception(self.ERR_05)
-            return False
 
         self.execution = WPSExecution()
         self.execution.statusLocation = self.statusURL
@@ -424,14 +424,11 @@ class WPSClient:
             self.status = self.ERROR
             self.processError = self.execution.errors[0]
             self.processErrorText = self.execution.errors[0].text
-
             self.logger.error(self.ERR_06 + self.processErrorText)
             self.logger.debug("The status URL: " + self.execution.statusLocation)
             raise Exception(self.ERR_06 + self.processErrorText)
 
-            return True
 
-        
         self.logger.debug(self.SUCC_01)
         self.status = self.FINISHED
                     
