@@ -211,7 +211,6 @@ class DataSet:
 		if self.path is None:
 			return None
 		mimetypes.init()
- 		mimetypes.guess_type('sdf')
 		return mimetypes.guess_type(self.path)[0]
 
 		
