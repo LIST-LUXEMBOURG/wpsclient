@@ -440,7 +440,8 @@ class WPSClient:
         Creates the MapFile object that encodes a map file publishing the 
         complex outputs and writes it to disk.
         
-        :returns: string with the path to the map file generated.
+        :returns: string with the path to the map file generated. None if no
+        map file was generated (no complex outputs present).
         """
         
         #self.map = UMN.MapFile(self.processId)
