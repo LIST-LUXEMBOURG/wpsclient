@@ -14,22 +14,27 @@ under the Licence is distributed on an "AS IS" basis, WITHOUT WARRANTIES OR
 CONDITIONS OF ANY KIND, either express or implied. See the Licence for the
 specific language governing permissions and limitations under the Licence.
 
-Created on Nov 21, 2013
+Created on Jul 23, 2014
 
 @author: desousa
 '''
 
-__all__ = ["Asynch",
-           "BufferGML",
-           "BufferWFS",
-           "Dijkstra",
-           "Logging",
-           "Noise",
-           "PVPotential",
-           "Rand",
-           "SlopeAspect",
-           "SolarCadastre",
-           "SolarIrradiation",
-           "SolarSegmentation",
-           "Sum",
-           "UltimateQuestion"]
+from Example import Example
+import WPSClient
+
+class Sum(Example):
+
+    def __init__(self):
+        
+        Example.__init__(self)
+    
+        self.outputs = {"result":"Number"}
+        
+		# Test asynchronous processing
+        self.iniCli.init(
+		    "http://localhost/cgi-bin/pywps.cgi?", 
+		    "sum", 
+		    [("num", "50"),("num", "37")], 
+		    self.outputs)
+
+        
