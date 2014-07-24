@@ -182,6 +182,7 @@ class WPSClient:
     ERR_05  = "Incomplete request -- missing URL"
     ERR_06  = "The process failed with the following message:\n"
     ERR_07  = "Failed to save map file to disk:\n"
+    ERR_08  = "Cannot generate a map file with the outputs specified"
     SUCC_01 = "The process has finished successfully.\nProcessing the results..."
     SUCC_02 = "Wrote map file to disk:\n"
     
@@ -443,6 +444,10 @@ class WPSClient:
         :returns: string with the path to the map file generated. None if no
         map file was generated (no complex outputs present).
         """
+        
+        if(self.outputs is None) or (len(self.outputs) != len(self.execution.processOutputs)):
+            self.logger.error(self.ERR08)
+            raise Exception(self.ERR08)
         
         #self.map = UMN.MapFile(self.processId)
         self.map = MapFile(self.processId)
