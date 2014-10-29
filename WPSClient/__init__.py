@@ -487,6 +487,10 @@ class WPSClient:
             providedTitle = self.outputs[output.identifier]
             dataSet = DataSet(output.filePath, providedTitle, output.identifier)
             self.dataSets.append(dataSet)
+            
+            layerEPSG = dataSet.getEPSG()
+            if (layerEPSG == None):
+               layerEPSG = self.map.epsgCode
                                    
             if dataSet.dataType == dataSet.TYPE_VECTOR:
                 #* style = UMN.MapStyle()
@@ -495,7 +499,7 @@ class WPSClient:
                 layer = VectorLayer(
                     output.filePath, 
                     dataSet.getBBox(), 
-                    dataSet.getEPSG(), 
+                    layerEPSG, 
                     output.identifier,
                     providedTitle)
                 type = str(dataSet.getGeometryType())
@@ -513,7 +517,7 @@ class WPSClient:
                 layer = RasterLayer(
                     output.filePath, 
                     dataSet.getBBox(), 
-                    dataSet.getEPSG(), 
+                    layerEPSG, 
                     output.identifier,
                     providedTitle)
                 layer.setBounds(dataSet.getMaxValue(), dataSet.getMinValue())
