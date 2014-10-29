@@ -37,7 +37,11 @@ class Dijkstra(Example):
 		    # Process name
 		    "dijkstra", 
 		    # Inputs
-		    [("network", "Lux"), ("start", "30"), ("target", "60")],
+		    [("network", "Lux"), 
+             ("start_easting", "6.112"), 
+             ("start_northing","49.515"), 
+             ("target_easting", "6.129"), 
+             ("target_northing", "49.611")],
 		    # Outputs
 		    self.outputs)
         
