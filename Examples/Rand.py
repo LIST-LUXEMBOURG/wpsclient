@@ -35,7 +35,8 @@ class Rand(Example):
         # Basic test with literal inputs
         self.iniCli.init(
             #"http://wps.iguess.tudor.lu/cgi-bin/pywps.cgi?", 
-            "http://localhost/cgi-bin/pywps.cgi?",
+            "http://wps.iguess.tudor.lu/cgi-bin/pywps-test.cgi?",
+            #"http://localhost/cgi-bin/pywps.cgi?",
             "test_rand_map", 
             [("delay","10")], 
             self.outputs)
