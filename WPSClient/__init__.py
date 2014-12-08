@@ -409,9 +409,18 @@ class WPSClient:
             self.logger.error(self.ERR_05)
             raise Exception(self.ERR_05)
 
-        self.execution = WPSExecution()
-        self.execution.statusLocation = self.statusURL
-        self.execution.checkStatus(sleepSecs=0)
+        try: 
+            self.execution = WPSExecution()
+            self.execution.statusLocation = self.statusURL
+            self.execution.checkStatus(sleepSecs=0)
+        except Exception as ex:
+            mesg = "Unexpected error from OWSLib!! " + str(ex)
+            self.logger.error(mesg)
+            # This is a work arround !!!!!!!!
+            # It is not clear why these calls to OWSLib are failing.
+            # Thus RUNNING status is reported back
+            self.status = self.RUNNING
+            return False
         
         # Check if the process has finished
         if not (self.execution.isComplete()):
