@@ -25,11 +25,15 @@ import WPSClient
 
 #url = "http://wps.iguess.tudor.lu/wpsoutputs/pywps-40332884-aaaf-11e3-8adb-005056a52e0d.xml"
 #url = "http://wps.iguess.tudor.lu/wpsoutputs/pywps-0a1e8c52-b59a-11e3-9302-005056a52e0d.xml"
-url = "http://wps.iguess.tudor.lu/wpsoutputs/pywps-c2ef8116-5f57-11e4-bb94-005056a52e0d.xml" 
+#url = "http://wps.iguess.tudor.lu/wpsoutputs/pywps-c2ef8116-5f57-11e4-bb94-005056a52e0d.xml" 
+
+url = "http://wps.iguess.tudor.lu/wpsoutputs/pywps-502fa76a-7eeb-11e4-a9be-005056a52e0d.xml"
 
 #outputs = {"slope":"MySlope","aspect":"MyAspect"}
 #outputs = {"solar_irradiation":"solar_irradiation","roof_patches":"roof_patches"}
-outputs = {"pv_potential":"LdS.pv_potential_01"}
+#outputs = {"pv_potential":"LdS.pv_potential_01"}
+
+outputs = {"path":"LdS.myPath"}
 
 statCli = WPSClient.WPSClient()
 

@@ -25,11 +25,12 @@ from Examples import *
 #t = BufferGML.BufferGML()
 #t = BufferWFS.BufferWFS()
 #t = Dijkstra.Dijkstra()
+t = DijkstraCost.DijkstraCost()
 #t = PVPotential.PVPotential()
 #t = Logging.Logging()
 #t = Noise.Noise()
 #t = SlopeAspect.SlopeAspect()
-t = Sum.Sum()
+#t = Sum.Sum()
 #t = Rand.Rand()
 
 t.run()
