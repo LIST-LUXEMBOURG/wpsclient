@@ -34,7 +34,7 @@ This package is released under the GPL-3.0 open source license [4].
 
 __all__ = ["DataSet","MapServerText"]
 
-import logging
+import os, logging
 from ConfigParser import SafeConfigParser
 from owslib.wps import WebProcessingService, WPSExecution
 from DataSet import DataSet
@@ -242,7 +242,9 @@ class WPSClient:
         """
         
         parser = SafeConfigParser()
-        parser.read('WPSClient.cfg')
+        currDir = os.path.dirname(os.path.realpath(__file__))
+        parentDir = os.path.abspath(os.path.join(currDir, os.pardir))
+        parser.read(os.path.join(parentDir, 'WPSClient.cfg'))
     
         self.logFile      = parser.get('Logging',   'logFile')
         self.logLevel     = parser.get('Logging',   'logLevel')
