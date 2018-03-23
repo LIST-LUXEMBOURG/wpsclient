@@ -1,6 +1,6 @@
 # coding: utf-8
 '''
-Copyright 2010 - 2015 CRP Henri Tudor
+Copyright 2010 - 2019 Luxembourg Institute of Science and Technology. 
 
 Licenced under the EUPL, Version 1.1 or – as soon they will be approved by the
 European Commission - subsequent versions of the EUPL (the "Licence");
