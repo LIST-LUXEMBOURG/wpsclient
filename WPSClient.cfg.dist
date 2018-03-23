@@ -16,17 +16,17 @@ meta_fees: none
 meta_accessconstraints: none
 meta_keywordlist: Geospatial WebServices,iGUESS, MUSIC
 meta_addresstype: 
-meta_address: 66, rue de Luxembourg
+meta_address: 5, avenue des Haut-Fournaux
 meta_city: Esch-sur-Alzette
 meta_stateorprovince: 
-meta_postcode: 4221
+meta_postcode: 4263
 meta_country: Luxembourg
-meta_contactelectronicmailaddress: info@tudor.lu
-meta_contactperson: Han Solo
-meta_contactorganization: CRP Henri Tudor
-meta_contactposition: Engineer
-meta_role: Engineer
-meta_contactvoicetelephone: 00352 425991 6000
-meta_contactfacsimiletelephone: 00352 425991 555
+meta_contactelectronicmailaddress: info@list.lu
+meta_contactperson: Christian Braun
+meta_contactorganization: Luxembourg Institute of Science and Technology
+meta_contactposition: Research & Technology Associate
+meta_role: Researcher
+meta_contactvoicetelephone: 00352 275888 5048
+meta_contactfacsimiletelephone: 00352 275888 -
 meta_contactinstructions: by phone
-meta_hoursofservice: 24/7
+meta_hoursofservice: 8:00-16:00/5 CET
